@@ -6546,7 +6546,304 @@ Reading New Command:
 ParseQuery::clear
 
 Reading New Command: 
+A1 <- SELECT Dnum <= 5 FROM PROJECT
+doCommand
+syntacticParse
+syntacticParseSELECTION
+semanticParse
+semanticParseSELECTION
+TableCatalogue::isTable
+TableCatalogue::isTable
+TableCatalogue::isColumnFromTable
+TableCatalogue::isTable
+TableCatalogue::getTable
+Table::isColumn
+executeSELECTION
+TableCatalogue::getTable
+Table::Table
+Table::printRow
+Table::printRow
+Table::getCursor
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::insertIntoPool
+Page::Page
+TableCatalogue::getTable
+Cursor::geNext
+Page::getRow
+Table::getColumnIndex
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+TableCatalogue::getTable
+Table::getNext
+Table::blockify
+BufferManager::writePage
+Page::Page
+Page::writePage
+TableCatalogue::~insertTable
+ParseQuery::clear
 
+Reading New Command: 
+A2 <- SELECT Dnum >= 1 FROM A1
+doCommand
+syntacticParse
+syntacticParseSELECTION
+semanticParse
+semanticParseSELECTION
+TableCatalogue::isTable
+TableCatalogue::isTable
+TableCatalogue::isColumnFromTable
+TableCatalogue::isTable
+TableCatalogue::getTable
+Table::isColumn
+executeSELECTION
+TableCatalogue::getTable
+Table::Table
+Table::printRow
+Table::printRow
+Table::getCursor
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::insertIntoPool
+Page::Page
+TableCatalogue::getTable
+Cursor::geNext
+Page::getRow
+Table::getColumnIndex
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+TableCatalogue::getTable
+Table::getNext
+Table::blockify
+BufferManager::writePage
+Page::Page
+Page::writePage
+TableCatalogue::~insertTable
+ParseQuery::clear
+
+Reading New Command: 
+A3 <- SELECT Dnum != 2 FROM A2
+doCommand
+syntacticParse
+syntacticParseSELECTION
+semanticParse
+semanticParseSELECTION
+TableCatalogue::isTable
+TableCatalogue::isTable
+TableCatalogue::isColumnFromTable
+TableCatalogue::isTable
+TableCatalogue::getTable
+Table::isColumn
+executeSELECTION
+TableCatalogue::getTable
+Table::Table
+Table::printRow
+Table::printRow
+Table::getCursor
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::insertIntoPool
+Page::Page
+TableCatalogue::getTable
+Cursor::geNext
+Page::getRow
+Table::getColumnIndex
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+TableCatalogue::getTable
+Table::getNext
+Table::blockify
+BufferManager::writePage
+Page::Page
+Page::writePage
+TableCatalogue::~insertTable
+ParseQuery::clear
+
+Reading New Command: 
+A4 <- SELECT Dnum != 3 FROM A3
+doCommand
+syntacticParse
+syntacticParseSELECTION
+semanticParse
+semanticParseSELECTION
+TableCatalogue::isTable
+TableCatalogue::isTable
+TableCatalogue::isColumnFromTable
+TableCatalogue::isTable
+TableCatalogue::getTable
+Table::isColumn
+executeSELECTION
+TableCatalogue::getTable
+Table::Table
+Table::printRow
+Table::printRow
+Table::getCursor
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::insertIntoPool
+Page::Page
+TableCatalogue::getTable
+Cursor::geNext
+Page::getRow
+Table::getColumnIndex
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+TableCatalogue::getTable
+Table::getNext
+Table::blockify
+BufferManager::writePage
+Page::Page
+Page::writePage
+TableCatalogue::~insertTable
+ParseQuery::clear
+
+Reading New Command: 
+Q5 <- SELECT Dnum != 4 FROM A4
+doCommand
+syntacticParse
+syntacticParseSELECTION
+semanticParse
+semanticParseSELECTION
+TableCatalogue::isTable
+TableCatalogue::isTable
+TableCatalogue::isColumnFromTable
+TableCatalogue::isTable
+TableCatalogue::getTable
+Table::isColumn
+executeSELECTION
+TableCatalogue::getTable
+Table::Table
+Table::printRow
+Table::printRow
+Table::getCursor
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::insertIntoPool
+Page::Page
+TableCatalogue::getTable
+Cursor::geNext
+Page::getRow
+Table::getColumnIndex
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Cursor::geNext
+Page::getRow
+TableCatalogue::getTable
+Table::getNext
+Table::blockify
+BufferManager::writePage
+Page::Page
+Page::writePage
+TableCatalogue::~insertTable
 ParseQuery::clear
 
 Reading New Command: 
@@ -6708,12 +7005,61 @@ Table::printRow
 ParseQuery::clear
 
 Reading New Command: 
+EXPORT Q5
+doCommand
+syntacticParse
+syntacticParseEXPORT
+semanticParse
+semanticParseEXPORT
+TableCatalogue::isTable
+executeEXPORT
+TableCatalogue::getTable
+Table::makePermanent
+Table::isPermanent
+BufferManager::deleteFile: Success
+Table::printRow
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::insertIntoPool
+Page::Page
+TableCatalogue::getTable
+Cursor::geNext
+Page::getRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+Cursor::geNext
+Page::getRow
+Table::printRow
+ParseQuery::clear
+
+Reading New Command: 
 QUIT
 TableCatalogue::~TableCatalogue
 Table::~unload
 BufferManager::deleteFile
 BufferManager::deleteFile: Success
 Table::isPermanent
+BufferManager::deleteFile: Err
+Table::~unload
+BufferManager::deleteFile
+BufferManager::deleteFile: Success
+Table::isPermanent
+BufferManager::deleteFile: Success
+Table::~unload
+BufferManager::deleteFile
+BufferManager::deleteFile: Success
+Table::isPermanent
+BufferManager::deleteFile: Success
+Table::~unload
+BufferManager::deleteFile
+BufferManager::deleteFile: Success
+Table::isPermanent
 BufferManager::deleteFile: Success
 Table::~unload
 BufferManager::deleteFile
@@ -6725,6 +7071,11 @@ BufferManager::deleteFile
 BufferManager::deleteFile: Success
 BufferManager::deleteFile
 BufferManager::deleteFile: Success
+BufferManager::deleteFile
+BufferManager::deleteFile: Success
+Table::isPermanent
+BufferManager::deleteFile: Success
+Table::~unload
 BufferManager::deleteFile
 BufferManager::deleteFile: Success
 Table::isPermanent
@@ -6865,6 +7216,11 @@ BufferManager::deleteFile
 BufferManager::deleteFile: Success
 BufferManager::deleteFile
 BufferManager::deleteFile: Success
+BufferManager::deleteFile
+BufferManager::deleteFile: Success
+Table::isPermanent
+BufferManager::deleteFile: Success
+Table::~unload
 BufferManager::deleteFile
 BufferManager::deleteFile: Success
 Table::isPermanent
