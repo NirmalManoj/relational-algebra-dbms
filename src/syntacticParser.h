@@ -8,16 +8,20 @@ enum QueryType
     CROSS,
     DISTINCT,
     EXPORT,
+    EXPORT_MATRIX,
     INDEX,
     JOIN,
     LIST,
     LOAD,
+    LOAD_MATRIX,
     PRINT,
+    PRINT_MATRIX,
     PROJECTION,
     RENAME,
     SELECTION,
     SORT,
     SOURCE,
+    TRANSPOSE,
     UNDETERMINED
 };
 

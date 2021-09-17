@@ -25,6 +25,8 @@ bool syntacticParse()
         return syntacticParseRENAME();
     else if(possibleQueryType == "EXPORT")
         return syntacticParseEXPORT();
+    else if (possibleQueryType == "TRANSPOSE")
+        return syntacticParseTRANSPOSE();
     else if(possibleQueryType == "SOURCE")
         return syntacticParseSOURCE();
     else

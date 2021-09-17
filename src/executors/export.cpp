@@ -2,11 +2,18 @@
 
 /**
  * @brief 
- * SYNTAX: EXPORT <relation_name> 
+ * SYNTAX: EXPORT <relation_name> OR EXPORT MATRIX <matrix_name>
  */
 
 bool syntacticParseEXPORT()
 {
+    if (tokenizedQuery.size() == 3 && tokenizedQuery[1] == "MATRIX")
+    {
+        logger.log("syntacticParseEXPORT_MATRIX");
+        parsedQuery.queryType = EXPORT_MATRIX;
+        parsedQuery.loadRelationName = tokenizedQuery[2];
+        return true;
+    }
     logger.log("syntacticParseEXPORT");
     if (tokenizedQuery.size() != 2)
     {

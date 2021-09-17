@@ -1,10 +1,17 @@
 #include "global.h"
 /**
  * @brief 
- * SYNTAX: LOAD relation_name
+ * SYNTAX: LOAD <relation_name> OR LOAD MATRIX <matrix_name>
  */
 bool syntacticParseLOAD()
 {
+    if (tokenizedQuery.size() == 3 && tokenizedQuery[1] == "MATRIX")
+    {
+        logger.log("syntacticParseLOAD_MATRIX");
+        parsedQuery.queryType = LOAD_MATRIX;
+        parsedQuery.loadRelationName = tokenizedQuery[2];
+        return true;
+    }
     logger.log("syntacticParseLOAD");
     if (tokenizedQuery.size() != 2)
     {

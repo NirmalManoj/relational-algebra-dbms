@@ -1,10 +1,17 @@
 #include "global.h"
 /**
  * @brief 
- * SYNTAX: PRINT relation_name
+ * SYNTAX: PRINT <relation_name> OR  OR PRINT MATRIX <matrix_name>
  */
 bool syntacticParsePRINT()
 {
+    if (tokenizedQuery.size() == 3 && tokenizedQuery[1] == "MATRIX")
+    {
+        logger.log("syntacticParsePRINT_MATRIX");
+        parsedQuery.queryType = PRINT_MATRIX;
+        parsedQuery.loadRelationName = tokenizedQuery[2];
+        return true;
+    }
     logger.log("syntacticParsePRINT");
     if (tokenizedQuery.size() != 2)
     {
