@@ -1,0 +1,3 @@
+* transpose function - matrix.cpp (TRANSPOSE)
+* print function - matrix.cpp (PRINT)
+* makePermanent function - matrix.cpp (EXPORT)

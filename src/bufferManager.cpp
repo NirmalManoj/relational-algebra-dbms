@@ -9,18 +9,18 @@ BufferManager::BufferManager()
  * @brief Function called to read a page from the buffer manager. If the page is
  * not present in the pool, the page is read and then inserted into the pool.
  *
- * @param tableName 
+ * @param containerName 
  * @param pageIndex 
  * @return Page 
  */
-Page BufferManager::getPage(string tableName, int pageIndex)
+Page BufferManager::getPage(string containerName, int pageIndex, int pageType, bool ofSparseMatrix)
 {
     logger.log("BufferManager::getPage");
-    string pageName = "../data/temp/"+tableName + "_Page" + to_string(pageIndex);
+    string pageName = "../data/temp/"+containerName + "_Page" + to_string(pageIndex);
     if (this->inPool(pageName))
         return this->getFromPool(pageName);
     else
-        return this->insertIntoPool(tableName, pageIndex);
+        return this->insertIntoPool(containerName, pageIndex, pageType, ofSparseMatrix);
 }
 
 /**
@@ -58,18 +58,18 @@ Page BufferManager::getFromPool(string pageName)
 }
 
 /**
- * @brief Inserts page indicated by tableName and pageIndex into pool. If the
+ * @brief Inserts page indicated by containerName and pageIndex into pool. If the
  * pool is full, the pool ejects the oldest inserted page from the pool and adds
  * the current page at the end. It naturally follows a queue data structure. 
  *
- * @param tableName 
+ * @param containerName 
  * @param pageIndex 
  * @return Page 
  */
-Page BufferManager::insertIntoPool(string tableName, int pageIndex)
+Page BufferManager::insertIntoPool(string containerName, int pageIndex, int pageType, bool ofSparseMatrix)
 {
     logger.log("BufferManager::insertIntoPool");
-    Page page(tableName, pageIndex);
+    Page page(containerName, pageIndex, pageType, ofSparseMatrix);
     if (this->pages.size() >= BLOCK_COUNT)
         pages.pop_front();
     pages.push_back(page);
@@ -78,17 +78,48 @@ Page BufferManager::insertIntoPool(string tableName, int pageIndex)
 
 /**
  * @brief The buffer manager is also responsible for writing pages. This is
- * called when new tables are created using assignment statements.
+ * called when new tables are created using assignment statements. Below function 
+ * writes a table page to disk
  *
- * @param tableName 
+ * @param containerName 
  * @param pageIndex 
  * @param rows 
- * @param rowCount 
+ * @param rowCount
  */
-void BufferManager::writePage(string tableName, int pageIndex, vector<vector<int>> rows, int rowCount)
+void BufferManager::writePage(string containerName, int pageIndex, vector<vector<int>> rows, int rowCount)
 {
-    logger.log("BufferManager::writePage");
-    Page page(tableName, pageIndex, rows, rowCount);
+    logger.log("BufferManager::writeTablePage");
+    Page page(containerName, pageIndex, rows, rowCount);
+    page.writePage();
+}
+
+/**
+ * @brief  Below function writes a non sparse matrix page to disk
+ *
+ * @param containerName 
+ * @param pageIndex 
+ * @param all_elements
+ * @param rowCount
+ */
+void BufferManager::writePage(string containerName, int pageIndex, vector<int> all_elements, int elementCount)
+{
+    logger.log("BufferManager::writeNonSparseMatrixPage");
+    Page page(containerName, pageIndex, all_elements, elementCount);
+    page.writePage();
+}
+
+/**
+ * @brief  Below function writes a non sparse matrix page to disk
+ *
+ * @param containerName 
+ * @param pageIndex 
+ * @param non_zero_elements
+ * @param rowCount
+ */
+void BufferManager::writePage(string containerName, int pageIndex, map<int, int> non_zero_elements, int elementCount)
+{
+    logger.log("BufferManager::writeSparseMatrixPage");
+    Page page(containerName, pageIndex, non_zero_elements, elementCount);
     page.writePage();
 }
 
@@ -107,14 +138,14 @@ void BufferManager::deleteFile(string fileName)
 
 /**
  * @brief Overloaded function that calls deleteFile(fileName) by constructing
- * the fileName from the tableName and pageIndex.
+ * the fileName from the containerName and pageIndex.
  *
- * @param tableName 
+ * @param containerName 
  * @param pageIndex 
  */
-void BufferManager::deleteFile(string tableName, int pageIndex)
+void BufferManager::deleteFile(string containerName, int pageIndex)
 {
     logger.log("BufferManager::deleteFile");
-    string fileName = "../data/temp/"+tableName + "_Page" + to_string(pageIndex);
+    string fileName = "../data/temp/"+containerName + "_Page" + to_string(pageIndex);
     this->deleteFile(fileName);
 }

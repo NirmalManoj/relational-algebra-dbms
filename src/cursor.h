@@ -9,11 +9,13 @@ class Cursor{
     public:
     Page page;
     int pageIndex;
-    string tableName;
+    string containerName;
     int pagePointer;
+    int pageType;
+    bool ofSparseMatrix;
 
     public:
-    Cursor(string tableName, int pageIndex);
+    Cursor(string containerName, int pageIndex, int pageType, bool ofSparseMatrix);
     vector<int> getNext();
     void nextPage(int pageIndex);
 };

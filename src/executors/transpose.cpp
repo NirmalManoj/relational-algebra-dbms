@@ -21,10 +21,18 @@ bool syntacticParseTRANSPOSE()
 bool semanticParseTRANSPOSE()
 {
     logger.log("semanticParseTRANSPOSE");
+    if (!matrixCatalogue.isMatrix(parsedQuery.printRelationName))
+    {
+        cout << "SEMANTIC ERROR: Matrix doesn't exist" << endl;
+        return false;
+    }
+    return true;
 }
 
 void executeTRANSPOSE()
 {
     logger.log("executeTRANSPOSE");
+    Matrix* matrix = matrixCatalogue.getMatrix(parsedQuery.printRelationName);
+    matrix->transpose();
     return;
 }

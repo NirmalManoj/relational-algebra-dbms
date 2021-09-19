@@ -225,7 +225,7 @@ void Table::print()
     //print headings
     this->writeRow(this->columns, cout);
 
-    Cursor cursor(this->tableName, 0);
+    Cursor cursor(this->tableName, 0, 0, false);
     vector<int> row;
     for (int rowCounter = 0; rowCounter < count; rowCounter++)
     {
@@ -242,16 +242,14 @@ void Table::print()
  * returns an empty row is all rows have been read.
  *
  * @param cursor 
- * @return vector<int> 
  */
 void Table::getNextPage(Cursor *cursor)
 {
-    logger.log("Table::getNext");
-
-        if (cursor->pageIndex < this->blockCount - 1)
-        {
-            cursor->nextPage(cursor->pageIndex+1);
-        }
+    logger.log("Table::getNextPage");
+    if (cursor->pageIndex < this->blockCount - 1)
+    {
+        cursor->nextPage(cursor->pageIndex+1);
+    }
 }
 
 
@@ -272,7 +270,7 @@ void Table::makePermanent()
     //print headings
     this->writeRow(this->columns, fout);
 
-    Cursor cursor(this->tableName, 0);
+    Cursor cursor(this->tableName, 0, 0, false);
     vector<int> row;
     for (int rowCounter = 0; rowCounter < this->rowCount; rowCounter++)
     {
@@ -292,7 +290,7 @@ bool Table::isPermanent()
 {
     logger.log("Table::isPermanent");
     if (this->sourceFileName == "../data/" + this->tableName + ".csv")
-    return true;
+        return true;
     return false;
 }
 
@@ -317,7 +315,7 @@ void Table::unload(){
 Cursor Table::getCursor()
 {
     logger.log("Table::getCursor");
-    Cursor cursor(this->tableName, 0);
+    Cursor cursor(this->tableName, 0, 0, false);
     return cursor;
 }
 /**

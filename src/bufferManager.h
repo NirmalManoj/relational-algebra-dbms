@@ -22,17 +22,18 @@
  */
 class BufferManager{
 
-    deque<Page> pages; 
+    deque<Page> pages;
     bool inPool(string pageName);
     Page getFromPool(string pageName);
-    Page insertIntoPool(string tableName, int pageIndex);
+    Page insertIntoPool(string tableName, int pageIndex, int pageType, bool ofSparseMatrix);
 
     public:
     
     BufferManager();
-    Page getPage(string tableName, int pageIndex);
-    void writePage(string pageName, vector<vector<int>> rows);
+    Page getPage(string tableName, int pageIndex, int pageType, bool ofSparseMatrix);
+    void writePage(string tableName, int pageIndex, vector<vector<int>> rows, int rowCount);   // table page
+    void writePage(string containerName, int pageIndex, vector<int> all_elements, int elementCount);    // Non-sparse matrix
+    void writePage(string containerName, int pageIndex, map<int, int> non_zero_elements, int elementCount);     // Sparse matrix
     void deleteFile(string tableName, int pageIndex);
     void deleteFile(string fileName);
-    void writePage(string tableName, int pageIndex, vector<vector<int>> rows, int rowCount);
 };
