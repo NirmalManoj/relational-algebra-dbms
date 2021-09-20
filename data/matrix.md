@@ -92,18 +92,3 @@ NOTE - Because of this step, the global sorted ordering across cell numbers (key
 * Thus we have obtained the transpose of the matrix in-place, by using a small data structure and atmost two temporary blocks in main memory.
 
 
-### LOAD OPERATION 
-
-* We traverse through the matrix like a normal table (similar to blockify() of tables), in a row-major order. We iterate through each element one by one, and store it in corresponding data structure (ignoring zero values in sparse matrices case). When a fixed limit per block is reached, we simply proceed to storing in the next page, by saving the previous one (like in blockify() of tables).
-
-### PRINT OPERATION
-
-* min(n, 20) rows are printed like in tables, with the help of cursor object (which traverses differently for matrices compared to tables, depending on sparsity too).
-
-* For sparse matrices, we iterate from current non-zero element cell number to next non-zero element cell number, and print zeroes for values in between.
-
-### EXPORT OPERATION
-
-* Similar to export of tables and print of matrices. They are just traversed differently based on data structure (cursor).
-
-
