@@ -63,7 +63,7 @@
 #### Sparse matrices
 
 
-* We traverse through the entire matrix block by block in serial order.
+* We traverse through the entire list of cells (from 1 to n*n) via a loop, and check the existence for each cell (and its transpose cell) and try to obtain its transpose in below described manner.
 
 * We load the block with current cell number into memory.
 
@@ -76,6 +76,8 @@
 * If this swap-cell was not found in the position it was supposed to be, it clearly implies that it was omitted out, i.e, it was a zero value. Thus, now the current cell would become 0 and this omitted cell would have non-zero contents of the current cell. Hence, we simply update the key which is pointing to the non-zero value, such that the key is now the swap-cell number and not the original cell number. For example if cell number 25 had 6 and its swap-cell, say 50 had a 0 value (not present in map intially), then the initial key-value pair would be 25:6 (zero cell is ignored). After the transpose, the pair is updated to 50:6. 
 
 NOTE - Because of this step, the global sorted ordering across cell numbers (keys) across all pages might not hold, but it doesn't affect the binary search across 'last cell in block' vector or the current swapping process in any way. This is because every pair of cells (current cell and its swap-cell) is accessed only once, and if both of them were to have non-zero values, any number of above kind of operations (zero and non-zero case) wouldn't alter the block number of both of these non-zero cells. Thus, using this approach would help in obtaining the transpose for all possible cases.
+
+* If the current cell number doesn't exist in the blocks, it implies its a zero value. Follow the same logic above (swapping key with its swap-cell if its swap-cell has a non-zero value, or, do nothing if its swap-cell also doesn't exist, as it is also zero anyway).
 
 * We apply the above logic for every cell whose row number < column number, and thus we have obtained the transposed cell number - cell value pairings correctly. The only issue now is that we don't have them in serial order across blocks, for the matrix (for easier loading, printing and exporting).
 
