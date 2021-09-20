@@ -52,7 +52,7 @@ void Matrix::transpose()
  * @brief This function obtains dimension of the matrix and also obtains info
  * about sparsity of the matrix
  */
-bool Matrix::getDimensionAndSparsityDetails()
+void Matrix::getDimensionAndSparsityDetails()
 {
     logger.log("Matrix::getDimensionAndSparsityDetails");
     ifstream fin(this->sourceFileName, ios::in);
@@ -70,7 +70,6 @@ bool Matrix::getDimensionAndSparsityDetails()
     if(this->isSparse)
         tuple_size = 2;
     this->maxElementsPerBlock = (uint)((BLOCK_SIZE * 1000) / (sizeof(int) * tuple_size));
-    return true;
 }
 
 /**

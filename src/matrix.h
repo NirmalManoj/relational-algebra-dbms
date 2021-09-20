@@ -19,7 +19,7 @@ public:
     bool isSparse = false;
     
     bool blockify();
-    bool getDimensionAndSparsityDetails();
+    void getDimensionAndSparsityDetails();
     void checkSparsity();
     Matrix();
     Matrix(string matrixName);

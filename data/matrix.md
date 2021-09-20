@@ -73,9 +73,21 @@
 
 * After this swap-cell was found (it implies it had a non-zero value too!), then we use the same method as in non-sparse matrices and swap these 2 cell values in the key-value pairs, in both these ordered maps. This effectively means that the transpose operation has occurred with respect to these cells.
 
-* If this swap-cell was not found in the position it was supposed to be, it clearly implies that it was omitted out, i.e, it was a zero value. Thus, now the current cell would become 0 and this omitted cell would have non-zero contents of the current cell. Thus, we create an entry in the ordered map of second block, indicating that this swap-cell would now have a non-zero value. Also, the current cell entry would be deleted from the first block's ordered map, to ensure transpose occurred correctly.
+* If this swap-cell was not found in the position it was supposed to be, it clearly implies that it was omitted out, i.e, it was a zero value. Thus, now the current cell would become 0 and this omitted cell would have non-zero contents of the current cell. Hence, we simply update the key which is pointing to the non-zero value, such that the key is now the swap-cell number and not the original cell number. For example if cell number 25 had 6 and its swap-cell, say 50 had a 0 value (not present in map intially), then the initial key-value pair would be 25:6 (zero cell is ignored). After the transpose, the pair is updated to 50:6. 
 
-* This traversal is done for all the cells with row number < column number, and thus we have obtained the transposed matrix, which was transposed in-place.
+NOTE - Because of this step, the global sorted ordering across cell numbers (keys) across all pages might not hold, but it doesn't affect the binary search across 'last cell in block' vector or the current swapping process in any way. This is because every pair of cells (current cell and its swap-cell) is accessed only once, and if both of them were to have non-zero values, any number of above kind of operations (zero and non-zero case) wouldn't alter the block number of both of these non-zero cells. Thus, using this approach would help in obtaining the transpose for all possible cases.
+
+* We apply the above logic for every cell whose row number < column number, and thus we have obtained the transposed cell number - cell value pairings correctly. The only issue now is that we don't have them in serial order across blocks, for the matrix (for easier loading, printing and exporting).
+
+* We create a priority queue, whose elements would be the current smallest key-value pair for each block, along with the block number. One temporary block is also initialized in main memory, to store elements in an ordered manner (used in swapping to blocks). 
+
+* The priority queue is initialized with smallest cell number-value pairs of all blocks, and the top (smallest cell number) is popped and stored in the temporary block. From the block number to which the top belongs, we push the next smallest cell number-value pair into the priority queue, and repeat the process. Note that when an element is pushed into the queue or the temporary block, it is deleted from the disk block, freeing up space in the block.
+
+* The above step is repeated till the temporary block is filled. Once the temporary block is filled (maxElementCountPerBlock is reached), the residual elements still remaining in the first blocked are shifted to empty spaces in the blocks after that (it is guaranteed that they have enough space because we were freeing up space optimally and number of elements is constant). Now the first block is completely empty, and we fill it up with all entries of the temporary block. This temporary block is now cleared, and the same algorithm is applied again, starting from the second block. 
+
+* This ensures that the blocks are stored in serial order (from beginning to end). Eventually the priority queue becomes empty, implying that all the elements were processed.
+
+* Thus we have obtained the transpose of the matrix in-place, by using a small data structure and atmost two temporary blocks in main memory.
 
 
 ### LOAD OPERATION 
