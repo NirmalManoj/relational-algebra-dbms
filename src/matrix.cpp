@@ -187,7 +187,75 @@ void Matrix::print()
     logger.log("Matrix::print");
     uint count = min((long long)PRINT_COUNT, (long long)this->n);
     Cursor cursor(this->matrixName, 0, 1, this->isSparse);
-    // TODO - PRINT
+    vector<int> current_row;
+    vector<int> current_element;
+    int previous_element = -1, elementNumber = 0, rows_done = 0;
+    if(!this->isSparse)
+    {
+        while(true)
+        {
+            current_element = cursor.getNext();
+            if(current_element.empty())
+                break;
+            current_row.emplace_back(current_element);
+            if(current_row.size() % this->n == 0)
+            {
+                this->writeRow(current_row, cout);
+                rows_done++;
+                if(rows_done == count)
+                    break;
+                current_row.clear();
+            }
+        }
+    }
+    else
+    {
+        while(true)
+        {
+            current_element = cursor.getNext();
+            if(current_element.empty())
+                break;
+            elementNumber = current_element[0];
+            for(int i=previous_element+1;i<elementNumber;i++)
+            {
+                current_row.emplace_back(0);
+                if(current_row.size() % this->n == 0)
+                {
+                    this->writeRow(current_row, cout);
+                    rows_done++;
+                    if(rows_done == count)
+                        break;
+                    current_row.clear();
+                }                
+            }
+            current_row.emplace_back(current_element[1]);
+            if(current_row.size() % this->n == 0)
+            {
+                this->writeRow(current_row, cout);
+                rows_done++;
+                if(rows_done == count)
+                    break;
+                current_row.clear();
+            }
+            previous_element = elementNumber;
+        }
+        if(rows_done < count)
+        {
+            for(int i=previous_element+1;i<this->n*this->n;i++)
+            {
+                current_row.emplace_back(0);
+                if(current_row.size() % this->n == 0)
+                {
+                    this->writeRow(current_row, cout);
+                    rows_done++;
+                    if(rows_done == count)
+                        break;
+                    current_row.clear();
+                }            
+            }
+        }
+    }
+    printRowCount(this->n);
 }
 
 /**
@@ -219,7 +287,59 @@ void Matrix::makePermanent()
     string newSourceFile = "../data/" + this->matrixName + ".csv";
     ofstream fout(newSourceFile, ios::out);
     Cursor cursor(this->matrixName, 0, 1, this->isSparse);
-    // TODO - EXPORT
+    vector<int> current_row;
+    vector<int> current_element;
+    int previous_element = -1, elementNumber = 0;
+    if(!this->isSparse)
+    {
+        while(true)
+        {
+            current_element = cursor.getNext();
+            if(current_element.empty())
+                break;
+            current_row.emplace_back(current_element);
+            if(current_row.size() % this->n == 0)
+            {
+                this->writeRow(current_row, cout);
+                current_row.clear();
+            }
+        }
+    }
+    else
+    {
+        while(true)
+        {
+            current_element = cursor.getNext();
+            if(current_element.empty())
+                break;
+            elementNumber = current_element[0];
+            for(int i=previous_element+1;i<elementNumber;i++)
+            {
+                current_row.emplace_back(0);
+                if(current_row.size() % this->n == 0)
+                {
+                    this->writeRow(current_row, cout);
+                    current_row.clear();
+                }                
+            }
+            current_row.emplace_back(current_element[1]);
+            if(current_row.size() % this->n == 0)
+            {
+                this->writeRow(current_row, cout);
+                current_row.clear();
+            }
+            previous_element = elementNumber;
+        }
+        for(int i=previous_element+1;i<this->n*this->n;i++)
+        {
+            current_row.emplace_back(0);
+            if(current_row.size() % this->n == 0)
+            {
+                this->writeRow(current_row, cout);
+                current_row.clear();
+            }            
+        }
+    }   
     fout.close();
 }
 
