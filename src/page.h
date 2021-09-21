@@ -1,3 +1,6 @@
+#ifndef PAGE_H
+#define PAGE_H
+
 #include"logger.h"
 /**
  * @brief The Page object is the main memory representation of a physical page
@@ -38,3 +41,5 @@ class Page{
     void initializeMapPointer();
     void writePage();
 };
+
+#endif

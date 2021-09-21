@@ -1,3 +1,6 @@
+#ifndef SYNTACTICPARSER_H
+#define SYNTACTICPARSER_H
+
 #include "tableCatalogue.h"
 #include "matrixCatalogue.h"
 using namespace std;
@@ -128,3 +131,5 @@ bool syntacticParseTRANSPOSE();
 
 bool isFileExists(string tableName);
 bool isQueryFile(string fileName);
+
+#endif

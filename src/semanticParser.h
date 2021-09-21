@@ -1,3 +1,6 @@
+#ifndef SEMANTICPARSER_H
+#define SEMANTICPARSER_H
+
 #include"syntacticParser.h"
 
 bool semanticParse();
@@ -20,3 +23,5 @@ bool semanticParseEXPORT_MATRIX();
 bool semanticParseLOAD_MATRIX();
 bool semanticParsePRINT_MATRIX();
 bool semanticParseTRANSPOSE();
+
+#endif

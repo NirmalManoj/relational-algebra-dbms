@@ -1,3 +1,6 @@
+#ifndef EXECUTOR_H
+#define EXECUTOR_H
+
 #include"semanticParser.h"
 
 void executeCommand();
@@ -23,3 +26,5 @@ void executeTRANSPOSE();
 
 bool evaluateBinOp(int value1, int value2, BinaryOperator binaryOperator);
 void printRowCount(int rowCount);
+
+#endif

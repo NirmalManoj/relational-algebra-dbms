@@ -1,3 +1,6 @@
+#ifndef LOGGER_H
+#define LOGGER_H
+
 #include<iostream>
 #include<bits/stdc++.h>
 #include<sys/stat.h> 
@@ -17,3 +20,5 @@ class Logger{
 };
 
 extern Logger logger;
+
+#endif

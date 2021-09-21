@@ -1,3 +1,6 @@
+#ifndef MATRIX_H
+#define MATRIX_H
+
 #include "cursor.h"
 
 /**
@@ -68,3 +71,5 @@ void writeRow(vector<T> row)
     fout.close();
 }
 };
+
+#endif

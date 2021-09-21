@@ -1,3 +1,6 @@
+#ifndef BUFFERMANAGER_H
+#define BUFFERMANAGER_H
+
 #include"page.h"
 
 /**
@@ -37,3 +40,5 @@ class BufferManager{
     void deleteFile(string tableName, int pageIndex);
     void deleteFile(string fileName);
 };
+
+#endif

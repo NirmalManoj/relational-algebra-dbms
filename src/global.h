@@ -1,3 +1,6 @@
+#ifndef GLOBAL_H
+#define GLOBAL_H
+
 #include"executor.h"
 
 extern float BLOCK_SIZE;
@@ -8,3 +11,5 @@ extern ParsedQuery parsedQuery;
 extern TableCatalogue tableCatalogue;
 extern MatrixCatalogue matrixCatalogue;
 extern BufferManager bufferManager;
+
+#endif

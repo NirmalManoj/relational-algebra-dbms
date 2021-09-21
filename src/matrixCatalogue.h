@@ -1,3 +1,6 @@
+#ifndef MATRIXCATALOGUE_H
+#define MATRIXCATALOGUE_H
+
 #include "matrix.h"
 
 /**
@@ -20,3 +23,5 @@ public:
     void print();
     ~MatrixCatalogue();
 };
+
+#endif
