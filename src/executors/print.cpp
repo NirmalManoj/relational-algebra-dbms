@@ -9,7 +9,7 @@ bool syntacticParsePRINT()
     {
         logger.log("syntacticParsePRINT_MATRIX");
         parsedQuery.queryType = PRINT_MATRIX;
-        parsedQuery.loadRelationName = tokenizedQuery[2];
+        parsedQuery.printRelationName = tokenizedQuery[2];
         return true;
     }
     logger.log("syntacticParsePRINT");
