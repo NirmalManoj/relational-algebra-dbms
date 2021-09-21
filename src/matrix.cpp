@@ -109,7 +109,7 @@ bool Matrix::blockify()
     logger.log("Matrix::blockify");
     ifstream fin(this->sourceFileName, ios::in);
     string line, word;
-    int pageCounter = 0, lastElement = 0, rowCount = 0, columnsCount = 0;
+    uint pageCounter = 0, lastElement = 0, rowCount = 0, columnsCount = 0;
     map<int, int> nonZeroElementsInPage;
     vector<int> elementsInPage;
     while (getline(fin, line))
@@ -196,7 +196,7 @@ void Matrix::print()
             current_element = cursor.getNext();
             if(current_element.empty())
                 break;
-            current_row.emplace_back(current_element);
+            current_row.emplace_back(current_element[0]);
             if(current_row.size() % this->n == 0)
             {
                 this->writeRow(current_row, cout);
@@ -296,7 +296,7 @@ void Matrix::makePermanent()
             current_element = cursor.getNext();
             if(current_element.empty())
                 break;
-            current_row.emplace_back(current_element);
+            current_row.emplace_back(current_element[0]);
             if(current_row.size() % this->n == 0)
             {
                 this->writeRow(current_row, cout);
