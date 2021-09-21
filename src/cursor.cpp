@@ -55,7 +55,7 @@ vector<int> Cursor::getNext()
     this->pagePointer++;
     if(result.empty())
     {
-        tableCatalogue.getTable(this->containerName)->getNextPage(this);
+        matrixCatalogue.getMatrix(this->containerName)->getNextPage(this);
         if(!this->pagePointer){
             result = this->page.getNonSparseMatrixElement(this->pagePointer);
             this->pagePointer++;

@@ -3,6 +3,7 @@
 void MatrixCatalogue::insertMatrix(Matrix* matrix)
 {
     logger.log("MatrixCatalogue::~insertMatrix"); 
+    // logger.log(matrix->matrixName); 
     this->matrices[matrix->matrixName] = matrix;
 }
 
@@ -23,7 +24,9 @@ Matrix* MatrixCatalogue::getMatrix(string matrixName)
 
 bool MatrixCatalogue::isMatrix(string matrixName)
 {
-    logger.log("MatrixCatalogue::isMatrix"); 
+    logger.log("MatrixCatalogue::isMatrix");
+    logger.log(matrixName);
+    logger.log(this->matrices.count(matrixName));
     if (this->matrices.count(matrixName))
         return true;
     return false;

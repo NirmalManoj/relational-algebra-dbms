@@ -9,3 +9,9 @@ void Logger::log(string logString)
 {
     fout << logString << endl;
 }
+
+void Logger::log(int logInt)
+{
+    string logString = to_string(logInt);
+    this->log(logString);
+}

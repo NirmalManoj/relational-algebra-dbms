@@ -169,7 +169,7 @@ Page::Page(string containerName, int pageIndex, vector<int> all_elements, int el
     logger.log("Page::NonSparseMatrixPage");
     this->containerName = containerName;
     this->pageIndex = pageIndex;
-    this->pageType = 1;
+    this->pageType = 1; // Table page is 0, Matrix page is 1
     this->ofSparseMatrix = false;
     this->all_elements = all_elements;
     this->elementCount = elementCount;

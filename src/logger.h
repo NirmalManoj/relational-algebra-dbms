@@ -17,6 +17,7 @@ class Logger{
 
     Logger();
     void log(string logString);
+    void log(int logInt);
 };
 
 extern Logger logger;
