@@ -16,7 +16,8 @@ BufferManager::BufferManager()
 Page BufferManager::getPage(string containerName, int pageIndex, int pageType, bool ofSparseMatrix)
 {
     logger.log("BufferManager::getPage");
-    string pageName = "../data/temp/"+containerName + "_Page" + to_string(pageIndex);
+    string pageName = this->getPageName(containerName, pageIndex);
+    // string pageName = "../data/temp/"+containerName + "_Page" + to_string(pageIndex);
     if (this->inPool(pageName))
         return this->getFromPool(pageName);
     else
@@ -146,6 +147,12 @@ void BufferManager::deleteFile(string fileName)
 void BufferManager::deleteFile(string containerName, int pageIndex)
 {
     logger.log("BufferManager::deleteFile");
-    string fileName = "../data/temp/"+containerName + "_Page" + to_string(pageIndex);
+    string fileName = this->getPageName(containerName, pageIndex);
+    // string fileName = "../data/temp/"+containerName + "_Page" + to_string(pageIndex);
     this->deleteFile(fileName);
+}
+
+string BufferManager::getPageName(string containerName, int pageIndex)
+{
+    return  "../data/temp/" + containerName + "_Page" + to_string(pageIndex);
 }
