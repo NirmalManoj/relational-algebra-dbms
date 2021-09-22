@@ -1,4 +1,5 @@
 #include "global.h"
+#include <memory>
 
 /**
  * @brief Construct a new Matrix:: Matrix object
@@ -52,19 +53,39 @@ void Matrix::transpose()
     // current_element = cursor.getElementAtIndex(4);
     // logger.log(current_element[0]);
     logger.log("---------------------");
-    Cursor cursor(this->matrixName, 0, 1, this->isSparse);
+    // Cursor cursor(this->matrixName, 0, 1, this->isSparse);
+    // Page one(this->matrixName, 0, 1, this->isSparse);
+    // deque<Page *> pages;
+    // pages.push_back(new Page(this->matrixName, 0, 1, this->isSparse));
+    deque<std::shared_ptr<Page>> pages;
+    pages.push_back(std::make_shared<Page>(this->matrixName, 0, 1, this->isSparse));
     vector<int> current_element;
     int element_ind = -1;
     int el_row, el_col, swap_row, swap_col, swap_ind;
     int lo, hi, mid;
+    int block_cnt = -1;
+    // Page *firstBlock;
+    // Page *secondBlock;
+    std::shared_ptr<Page> firstBlock;
+    std::shared_ptr<Page> secondBlock;
+
     if(!this->isSparse)
     {
         while(true)
         {
-            current_element = cursor.getNext();
-            if(current_element.empty())
-                break;
             element_ind++;
+            if(element_ind == this->n*this->n){
+                while(!pages.empty()){
+                    pages.front()->writePage();
+                    pages.pop_front();
+                }
+                break;
+            }
+            if(element_ind % this->maxElementsPerBlock == 0){
+                block_cnt++;
+            }
+            string first_block_name = bufferManager.getPageName(this->matrixName, block_cnt);
+
             el_row = element_ind/this->n;
             el_col = element_ind % this->n;
             if(el_row >= el_col)
@@ -84,18 +105,60 @@ void Matrix::transpose()
                     hi = mid;
                 }
             }
-            if(element_ind == 650) // (0, 299) SWAPPED WITH THIS (299, 0)
-            {
-                logger.log(this->maxElementsPerBlock);
-                logger.log(element_ind);
-                logger.log(swap_ind);
-                logger.log(lo);
-                if(lo != 0){
-                    swap_ind = swap_ind - this->lastCellNumberInBlock[lo-1] - 1;
-                }
-                logger.log(swap_ind);
-                break;
+            string second_block_name = bufferManager.getPageName(this->matrixName, lo);
+
+            // if(element_ind == 650) // (0, 299) SWAPPED WITH THIS (299, 0)
+            // {
+            //     logger.log(this->maxElementsPerBlock);
+            //     logger.log(element_ind);
+            //     logger.log(swap_ind);
+            //     logger.log(lo);
+            //     if(lo != 0){
+            //         swap_ind = swap_ind - this->lastCellNumberInBlock[lo-1] - 1;
+            //     }
+            //     logger.log(swap_ind);
+            //     break;
+            // }
+            if(lo != 0){
+                swap_ind = swap_ind - this->lastCellNumberInBlock[lo-1] - 1;
             }
+            logger.log(this->maxElementsPerBlock);
+            logger.log(element_ind);
+            logger.log(swap_ind);
+            logger.log(lo);
+        // Warning:: Make sure to free the memory while popping.
+            if(pages.front()->pageName == first_block_name){
+                firstBlock = pages.front();
+            }else{
+                pages.front()->writePage();
+                pages.pop_front();
+                if(pages.front()->pageName == first_block_name){
+                    firstBlock = pages.front();
+                }else{
+                    // pages.push_front(new Page(this->matrixName, block_cnt, 1, this->isSparse));
+                    pages.push_front(std::make_shared<Page>(this->matrixName, block_cnt, 1, this->isSparse));
+                    firstBlock = pages.front();
+                }
+            }
+
+            if(pages.front()->pageName == second_block_name){
+                secondBlock = pages.front();
+            }else if(pages.back()->pageName == second_block_name){
+                secondBlock = pages.back();
+            }else{
+                if(pages.size()>=2){
+                    pages.back()->writePage();
+                    pages.pop_back();
+                }
+                // pages.push_back(new Page(this->matrixName, lo, 1, this->isSparse));
+                pages.push_back(std::make_shared<Page>(this->matrixName, lo, 1, this->isSparse));
+                secondBlock = pages.back();
+            }
+            int ind_one = element_ind % this->maxElementsPerBlock;
+            int val_one = firstBlock->all_elements[ind_one];
+            int val_two = secondBlock->all_elements[swap_ind];
+            firstBlock->all_elements[ind_one] = val_two;
+            secondBlock->all_elements[swap_ind] = val_one;
         }
     }
 }
