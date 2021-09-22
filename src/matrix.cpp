@@ -33,8 +33,6 @@ Matrix::Matrix(string matrixName)
 bool Matrix::load()
 {
     logger.log("Matrix::load");
-    fstream fin(this->sourceFileName, ios::in);
-    string line;
     this->getDimensionAndSparsityDetails();
     return this->blockify();
 }
@@ -87,14 +85,18 @@ void Matrix::checkSparsity()
         for (int i = 0; i < this->n; i++)
         {
             if (!getline(s, word, ','))
+            {
+                this->isSparse = false;
                 return;
+            }
             if (stoi(word) == 0)
                 zeroes++;
         }
     }
     if((5 * zeroes) >= (3 * this->n * this->n))
         this->isSparse = true;
-    this->isSparse = false;
+    else
+        this->isSparse = false;
 }
 
 /**
@@ -201,9 +203,9 @@ void Matrix::print()
             {
                 this->writeRow(current_row, cout);
                 rows_done++;
+                current_row.clear();
                 if(rows_done == count)
                     break;
-                current_row.clear();
             }
         }
     }
@@ -222,19 +224,21 @@ void Matrix::print()
                 {
                     this->writeRow(current_row, cout);
                     rows_done++;
+                    current_row.clear();
                     if(rows_done == count)
                         break;
-                    current_row.clear();
                 }                
             }
+            if(rows_done == count)
+                break;
             current_row.emplace_back(current_element[1]);
             if(current_row.size() % this->n == 0)
             {
                 this->writeRow(current_row, cout);
                 rows_done++;
+                current_row.clear();
                 if(rows_done == count)
                     break;
-                current_row.clear();
             }
             previous_element = elementNumber;
         }
@@ -247,9 +251,9 @@ void Matrix::print()
                 {
                     this->writeRow(current_row, cout);
                     rows_done++;
+                    current_row.clear();
                     if(rows_done == count)
                         break;
-                    current_row.clear();
                 }            
             }
         }
@@ -299,7 +303,7 @@ void Matrix::makePermanent()
             current_row.emplace_back(current_element[0]);
             if(current_row.size() % this->n == 0)
             {
-                this->writeRow(current_row, cout);
+                this->writeRow(current_row, fout);
                 current_row.clear();
             }
         }
@@ -317,14 +321,14 @@ void Matrix::makePermanent()
                 current_row.emplace_back(0);
                 if(current_row.size() % this->n == 0)
                 {
-                    this->writeRow(current_row, cout);
+                    this->writeRow(current_row, fout);
                     current_row.clear();
                 }                
             }
             current_row.emplace_back(current_element[1]);
             if(current_row.size() % this->n == 0)
             {
-                this->writeRow(current_row, cout);
+                this->writeRow(current_row, fout);
                 current_row.clear();
             }
             previous_element = elementNumber;
@@ -334,9 +338,9 @@ void Matrix::makePermanent()
             current_row.emplace_back(0);
             if(current_row.size() % this->n == 0)
             {
-                this->writeRow(current_row, cout);
+                this->writeRow(current_row, fout);
                 current_row.clear();
-            }            
+            }
         }
     }   
     fout.close();

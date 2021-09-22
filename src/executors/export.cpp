@@ -11,7 +11,7 @@ bool syntacticParseEXPORT()
     {
         logger.log("syntacticParseEXPORT_MATRIX");
         parsedQuery.queryType = EXPORT_MATRIX;
-        parsedQuery.loadRelationName = tokenizedQuery[2];
+        parsedQuery.exportRelationName = tokenizedQuery[2];
         return true;
     }
     logger.log("syntacticParseEXPORT");

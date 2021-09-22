@@ -143,9 +143,9 @@ vector<int> Page::getNextSparseMatrixElement()
     logger.log("Page::getNextSparseMatrixElement");
     if(this->nz_itr == this->non_zero_elements.end())
         return result;
-    this->nz_itr++;
     result.emplace_back(this->nz_itr->first);
     result.emplace_back(this->nz_itr->second);
+    this->nz_itr++;
     return result;
 }
 

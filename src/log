@@ -1,0 +1,408 @@
+BufferManager::BufferManager
+ParseQuery::clear
+
+Reading New Command: 
+LOAD A_MAT2
+doCommand
+syntacticParse
+syntacticParseLOAD
+semanticParse
+semanticParseLOAD
+TableCatalogue::isTable
+executeLOAD
+Table::Table
+Table::load
+Table::extractColumnNames
+Table::blockify
+BufferManager::writeTablePage
+Page::TablePage
+Page::writePage
+TableCatalogue::~insertTable
+ParseQuery::clear
+
+Reading New Command: 
+CLEAR A_MAT2
+doCommand
+syntacticParse
+syntacticParseCLEAR
+semanticParse
+semanticParseCLEAR
+TableCatalogue::isTable
+executeCLEAR
+TableCatalogue::isTable
+TableCatalogue::deleteTable
+Table::~unload
+BufferManager::deleteFile
+BufferManager::deleteFile: Success
+Table::isPermanent
+ParseQuery::clear
+
+Reading New Command: 
+LOAD MATRIX A_MAT2
+doCommand
+syntacticParse
+syntacticParseLOAD_MATRIX
+semanticParse
+semanticParseLOAD_MATRIX
+MatrixCatalogue::isMatrix
+A_MAT2
+0
+executeLOAD_MATRIX
+Matrix::Matrix
+Matrix::load
+Matrix::getDimensionAndSparsityDetails
+Matrix::checkSparsity
+Matrix::blockify
+BufferManager::writeNonSparseMatrixPage
+Page::NonSparseMatrixPage
+Page::writePage
+MatrixCatalogue::~insertMatrix
+ParseQuery::clear
+
+Reading New Command: 
+PRINT A_MAT2
+doCommand
+syntacticParse
+syntacticParsePRINT
+semanticParse
+semanticParsePRINT
+TableCatalogue::isTable
+ParseQuery::clear
+
+Reading New Command: 
+PRINT MATRIX A_MAT2
+doCommand
+syntacticParse
+syntacticParsePRINT_MATRIX
+semanticParse
+semanticParsePRINT_MATRIX
+MatrixCatalogue::isMatrix
+A_MAT2
+1
+executePRINT_MATRIX
+MatrixCatalogue::getMatrix
+Matrix::print
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::insertIntoPool
+Page::Page
+MatrixCatalogue::getMatrix
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Matrix::printRow
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Matrix::printRow
+ParseQuery::clear
+
+Reading New Command: 
+EXPORT MATRIX A_MAT2
+doCommand
+syntacticParse
+syntacticParseEXPORT_MATRIX
+semanticParse
+semanticParseEXPORT_MATRIX
+MatrixCatalogue::isMatrix
+A_MAT2
+1
+executeEXPORT_MATRIX
+MatrixCatalogue::getMatrix
+Matrix::makePermanent
+Matrix::isPermanent
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::getFromPool
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Matrix::printRow
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Matrix::printRow
+Cursor::getNext
+Page::getNonSparseMatrixElement
+MatrixCatalogue::getMatrix
+Matrix::getNext
+ParseQuery::clear
+
+Reading New Command: 
+LOAD MATRIX A_MAT
+doCommand
+syntacticParse
+syntacticParseLOAD_MATRIX
+semanticParse
+semanticParseLOAD_MATRIX
+MatrixCatalogue::isMatrix
+A_MAT
+0
+executeLOAD_MATRIX
+Matrix::Matrix
+Matrix::load
+Matrix::getDimensionAndSparsityDetails
+Matrix::checkSparsity
+Matrix::blockify
+BufferManager::writeNonSparseMatrixPage
+Page::NonSparseMatrixPage
+Page::writePage
+MatrixCatalogue::~insertMatrix
+ParseQuery::clear
+
+Reading New Command: 
+PRINT A_MAT
+doCommand
+syntacticParse
+syntacticParsePRINT
+semanticParse
+semanticParsePRINT
+TableCatalogue::isTable
+ParseQuery::clear
+
+Reading New Command: 
+PRINT MATRIX A_MAT
+doCommand
+syntacticParse
+syntacticParsePRINT_MATRIX
+semanticParse
+semanticParsePRINT_MATRIX
+MatrixCatalogue::isMatrix
+A_MAT
+1
+executePRINT_MATRIX
+MatrixCatalogue::getMatrix
+Matrix::print
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::insertIntoPool
+Page::Page
+MatrixCatalogue::getMatrix
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Matrix::printRow
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Matrix::printRow
+ParseQuery::clear
+
+Reading New Command: 
+EXPORT A_MAT
+doCommand
+syntacticParse
+syntacticParseEXPORT
+semanticParse
+semanticParseEXPORT
+TableCatalogue::isTable
+ParseQuery::clear
+
+Reading New Command: 
+EXPORT MATRIX A_MAT
+doCommand
+syntacticParse
+syntacticParseEXPORT_MATRIX
+semanticParse
+semanticParseEXPORT_MATRIX
+MatrixCatalogue::isMatrix
+A_MAT
+1
+executeEXPORT_MATRIX
+MatrixCatalogue::getMatrix
+Matrix::makePermanent
+Matrix::isPermanent
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::getFromPool
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Matrix::printRow
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Cursor::getNext
+Page::getNonSparseMatrixElement
+Matrix::printRow
+Cursor::getNext
+Page::getNonSparseMatrixElement
+MatrixCatalogue::getMatrix
+Matrix::getNext
+ParseQuery::clear
+
+Reading New Command: 
+LOAD B_MAT
+doCommand
+syntacticParse
+syntacticParseLOAD
+semanticParse
+semanticParseLOAD
+TableCatalogue::isTable
+executeLOAD
+Table::Table
+Table::load
+Table::extractColumnNames
+ParseQuery::clear
+
+Reading New Command: 
+CLEAR B_MAT
+doCommand
+syntacticParse
+syntacticParseCLEAR
+semanticParse
+semanticParseCLEAR
+TableCatalogue::isTable
+MatrixCatalogue::isMatrix
+B_MAT
+0
+ParseQuery::clear
+
+Reading New Command: 
+LOAD B_MAT
+doCommand
+syntacticParse
+syntacticParseLOAD
+semanticParse
+semanticParseLOAD
+TableCatalogue::isTable
+executeLOAD
+Table::Table
+Table::load
+Table::extractColumnNames
+ParseQuery::clear
+
+Reading New Command: 
+CLEAR B_MAT
+doCommand
+syntacticParse
+syntacticParseCLEAR
+semanticParse
+semanticParseCLEAR
+TableCatalogue::isTable
+MatrixCatalogue::isMatrix
+B_MAT
+0
+ParseQuery::clear
+
+Reading New Command: 
+LOAD MATRIX B_MAT
+doCommand
+syntacticParse
+syntacticParseLOAD_MATRIX
+semanticParse
+semanticParseLOAD_MATRIX
+MatrixCatalogue::isMatrix
+B_MAT
+0
+executeLOAD_MATRIX
+Matrix::Matrix
+Matrix::load
+Matrix::getDimensionAndSparsityDetails
+Matrix::checkSparsity
+Matrix::blockify
+BufferManager::writeSparseMatrixPage
+Page::SparseMatrixPage
+Page::writePage
+MatrixCatalogue::~insertMatrix
+ParseQuery::clear
+
+Reading New Command: 
+PRINT B_MAT
+doCommand
+syntacticParse
+syntacticParsePRINT
+semanticParse
+semanticParsePRINT
+TableCatalogue::isTable
+ParseQuery::clear
+
+Reading New Command: 
+PRINT MATRIX B_MAT
+doCommand
+syntacticParse
+syntacticParsePRINT_MATRIX
+semanticParse
+semanticParsePRINT_MATRIX
+MatrixCatalogue::isMatrix
+B_MAT
+1
+executePRINT_MATRIX
+MatrixCatalogue::getMatrix
+Matrix::print
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::insertIntoPool
+Page::Page
+MatrixCatalogue::getMatrix
+Cursor::getNext
+Page::getNextSparseMatrixElement
+Cursor::getNext
+Page::getNextSparseMatrixElement
+Matrix::printRow
+Cursor::getNext
+Page::getNextSparseMatrixElement
+Matrix::printRow
+Matrix::printRow
+ParseQuery::clear
+
+Reading New Command: 
+EXPORT MATRIX B_MAT
+doCommand
+syntacticParse
+syntacticParseEXPORT_MATRIX
+semanticParse
+semanticParseEXPORT_MATRIX
+MatrixCatalogue::isMatrix
+B_MAT
+1
+executeEXPORT_MATRIX
+MatrixCatalogue::getMatrix
+Matrix::makePermanent
+Matrix::isPermanent
+Cursor::Cursor
+BufferManager::getPage
+BufferManager::inPool
+BufferManager::getFromPool
+Cursor::getNext
+Page::getNextSparseMatrixElement
+Cursor::getNext
+Page::getNextSparseMatrixElement
+Matrix::printRow
+Cursor::getNext
+Page::getNextSparseMatrixElement
+Matrix::printRow
+Matrix::printRow
+Cursor::getNext
+Page::getNextSparseMatrixElement
+MatrixCatalogue::getMatrix
+Matrix::getNext
+ParseQuery::clear
+
+Reading New Command: 
+QUIT
+MatrixCatalogue::~MatrixCatalogue
+Matrix::~unload
+BufferManager::deleteFile
+BufferManager::deleteFile: Success
+Matrix::isPermanent
+Matrix::~unload
+BufferManager::deleteFile
+BufferManager::deleteFile: Success
+Matrix::isPermanent
+Matrix::~unload
+BufferManager::deleteFile
+BufferManager::deleteFile: Success
+Matrix::isPermanent
+TableCatalogue::~TableCatalogue
