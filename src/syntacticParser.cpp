@@ -93,6 +93,7 @@ void ParsedQuery::clear()
     this->loadRelationName = "";
 
     this->printRelationName = "";
+    this->transposeRelationName = "";
 
     this->projectionResultRelationName = "";
     this->projectionColumnList.clear();
