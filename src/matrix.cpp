@@ -43,7 +43,61 @@ bool Matrix::load()
  */
 void Matrix::transpose()
 {
-
+    // Cursor cursor(this->matrixName, 0, 1, this->isSparse);
+    // vector<int> current_element;
+    // current_element = cursor.getElementAtIndex(4);
+    // logger.log("H_____");
+    // logger.log(current_element[0]);
+    // cursor =  Cursor(this->matrixName, 3, 1, this->isSparse);
+    // current_element = cursor.getElementAtIndex(4);
+    // logger.log(current_element[0]);
+    logger.log("---------------------");
+    Cursor cursor(this->matrixName, 0, 1, this->isSparse);
+    vector<int> current_element;
+    int element_ind = -1;
+    int el_row, el_col, swap_row, swap_col, swap_ind;
+    int lo, hi, mid;
+    if(!this->isSparse)
+    {
+        while(true)
+        {
+            current_element = cursor.getNext();
+            if(current_element.empty())
+                break;
+            element_ind++;
+            el_row = element_ind/this->n;
+            el_col = element_ind % this->n;
+            if(el_row >= el_col)
+            {
+                continue;
+            }
+            swap_row = el_col;
+            swap_col = el_row;
+            swap_ind = swap_row * this->n + swap_col;
+            // Binary search to find the page number.
+            lo = 0, hi = this->lastCellNumberInBlock.size()-1;
+            while(lo < hi){
+                mid = (lo + hi)/2;
+                if (this->lastCellNumberInBlock[mid] < swap_ind){
+                    lo = mid+1;
+                } else {
+                    hi = mid;
+                }
+            }
+            if(element_ind == 650) // (0, 299) SWAPPED WITH THIS (299, 0)
+            {
+                logger.log(this->maxElementsPerBlock);
+                logger.log(element_ind);
+                logger.log(swap_ind);
+                logger.log(lo);
+                if(lo != 0){
+                    swap_ind = swap_ind - this->lastCellNumberInBlock[lo-1] - 1;
+                }
+                logger.log(swap_ind);
+                break;
+            }
+        }
+    }
 }
 
 /**

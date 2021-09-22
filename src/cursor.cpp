@@ -64,6 +64,15 @@ vector<int> Cursor::getNext()
     return result;    
 }
 
+vector<int> Cursor::getElementAtIndex(int elementIndex)
+{
+    vector<int> result;
+    if(!this->ofSparseMatrix){
+        result = this->page.getNonSparseMatrixElement(elementIndex);
+        return result;
+    }
+}
+
 /**
  * @brief Function that loads Page indicated by pageIndex. Now the cursor starts
  * reading from the new page.
