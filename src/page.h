@@ -40,6 +40,7 @@ class Page{
     vector<int> getNextSparseMatrixElement();
     void initializeMapPointer();
     void writePage();
+    string getPageName(string containerName, int pageIndex);
 };
 
 #endif

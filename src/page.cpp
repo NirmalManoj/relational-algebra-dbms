@@ -37,7 +37,8 @@ Page::Page(string containerName, int pageIndex, int pageType, bool ofSparseMatri
     this->pageIndex = pageIndex;
     this->pageType = pageType;
     this->ofSparseMatrix = ofSparseMatrix;
-    this->pageName = "../data/temp/" + this->containerName + "_Page" + to_string(pageIndex);
+    this->pageName = this->getPageName(this->containerName, pageIndex);
+    // this->pageName = "../data/temp/" + this->containerName + "_Page" + to_string(pageIndex);
     ifstream fin(pageName, ios::in);
     if(pageType == 0)
     {
@@ -160,7 +161,8 @@ Page::Page(string containerName, int pageIndex, vector<vector<int>> rows, int ro
     this->ofSparseMatrix = false;
     this->rowCount = rowCount;
     this->columnCount = rows[0].size();
-    this->pageName = "../data/temp/"+this->containerName + "_Page" + to_string(pageIndex);
+    this->pageName = this->getPageName(this->containerName, pageIndex);
+    // this->pageName = "../data/temp/"+this->containerName + "_Page" + to_string(pageIndex);
 }
 
 // Non Sparse matrix page creation
@@ -173,7 +175,8 @@ Page::Page(string containerName, int pageIndex, vector<int> all_elements, int el
     this->ofSparseMatrix = false;
     this->all_elements = all_elements;
     this->elementCount = elementCount;
-    this->pageName = "../data/temp/"+this->containerName + "_Page" + to_string(pageIndex);
+    this->pageName = this->getPageName(this->containerName, pageIndex);
+    // this->pageName = "../data/temp/"+this->containerName + "_Page" + to_string(pageIndex);
 }
 
 // Sparse matrix page creation
@@ -186,7 +189,8 @@ Page::Page(string containerName, int pageIndex, map<int, int> non_zero_elements,
     this->ofSparseMatrix = true;
     this->non_zero_elements = non_zero_elements;
     this->elementCount = elementCount;
-    this->pageName = "../data/temp/"+this->containerName + "_Page" + to_string(pageIndex);    
+    // this->pageName = "../data/temp/"+this->containerName + "_Page" + to_string(pageIndex);    
+    this->pageName = this->getPageName(this->containerName, pageIndex);
 }
 
 /**
@@ -227,4 +231,9 @@ void Page::writePage()
             fout << element << " ";
     }
     fout.close();
+}
+
+string Page::getPageName(string containerName, int pageIndex)
+{
+    return  "../data/temp/" + containerName + "_Page" + to_string(pageIndex);
 }
