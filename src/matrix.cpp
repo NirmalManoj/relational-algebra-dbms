@@ -44,6 +44,7 @@ bool Matrix::load()
  */
 void Matrix::transpose()
 {
+    bufferManager.pages.clear();
     // Cursor cursor(this->matrixName, 0, 1, this->isSparse);
     // vector<int> current_element;
     // current_element = cursor.getElementAtIndex(4);
@@ -66,7 +67,7 @@ void Matrix::transpose()
     int block_cnt = -1;
     // Page *firstBlock;
     // Page *secondBlock;
-    std::shared_ptr<Page> firstBlock;
+    std::shared_ptr<Page> firstBlock = pages.front();
     std::shared_ptr<Page> secondBlock;
 
     if(!this->isSparse)
@@ -159,6 +160,102 @@ void Matrix::transpose()
             int val_two = secondBlock->all_elements[swap_ind];
             firstBlock->all_elements[ind_one] = val_two;
             secondBlock->all_elements[swap_ind] = val_one;
+        }
+    }
+    else
+    {
+        block_cnt = 0;
+        int total_blocks = this->lastCellNumberInBlock.size(); // Total number of blocks
+        while(true)
+        {
+            element_ind++;
+            if(element_ind == this->n*this->n){
+                while(!pages.empty()){
+                    pages.front()->writePage();
+                    pages.pop_front();
+                }
+                break;
+            }
+            if(pages.front()->nz_itr == pages.front()->non_zero_elements.end()){
+                if(block_cnt+1 == total_blocks){
+                    // Doing nothing here. All blocks consumed.
+                }else{
+                    block_cnt++;
+                    pages.front()->writePage();
+                    pages.pop_front();
+                    if(!pages.empty() && pages.front()->pageName == bufferManager.getPageName(this->matrixName, block_cnt)){
+                        
+                    }else{
+                        pages.push_front(std::make_shared<Page>(this->matrixName, block_cnt, 1, this->isSparse));
+                    }
+                    
+                }
+            }
+            // firstBlock = pages.front();
+            // if(firstBlock->nz_itr != firstBlock->non_zero_elements.end())
+            // {
+
+            // }
+            el_row = element_ind/this->n;
+            el_col = element_ind % this->n;
+            if(el_row >= el_col)
+            {
+                continue;
+            }
+            swap_row = el_col;
+            swap_col = el_row;
+            swap_ind = swap_row * this->n + swap_col;
+            lo = 0, hi = this->lastCellNumberInBlock.size()-1;
+            while(lo < hi){
+                mid = (lo + hi)/2;
+                if (this->lastCellNumberInBlock[mid] < swap_ind){
+                    lo = mid+1;
+                } else {
+                    hi = mid;
+                }
+            }
+            string second_block_name = bufferManager.getPageName(this->matrixName, lo);
+            logger.log(second_block_name);
+
+            if(pages.front()->pageName == second_block_name){
+                secondBlock = pages.front();
+                logger.log("YES");
+            }else if(pages.back()->pageName == second_block_name){
+                secondBlock = pages.back();
+            }else{
+                if(pages.size()>=2){
+                    pages.back()->writePage();
+                    pages.pop_back();
+                }
+                // pages.push_back(new Page(this->matrixName, lo, 1, this->isSparse));
+                pages.push_back(std::make_shared<Page>(this->matrixName, lo, 1, this->isSparse));
+                secondBlock = pages.back();
+            }
+            int val_one = 0;
+            int val_two = 0;
+            if(firstBlock->nz_itr->first == element_ind){
+                val_one = firstBlock->nz_itr->second;
+                // firstBlock->nz_itr++;
+            }
+            auto tmp_it = secondBlock->non_zero_elements.find(swap_ind);
+            if(tmp_it != secondBlock->non_zero_elements.end()){
+                val_two = tmp_it->second;
+            }
+            if(val_one > 0 && val_two > 0){
+                logger.log("--------");
+                logger.log(val_one);
+                logger.log(val_two);
+                logger.log("------------");
+                tmp_it->second = val_one;
+                firstBlock->nz_itr->second = val_two;
+                // firstBlock->writePage();
+                // secondBlock->writePage();
+                // return;
+            }
+            if(firstBlock->nz_itr->first == element_ind){
+                // val_one = firstBlock->nz_itr->second;
+                firstBlock->nz_itr++;
+            }
         }
     }
 }

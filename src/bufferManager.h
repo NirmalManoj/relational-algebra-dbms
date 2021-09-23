@@ -25,12 +25,13 @@
  */
 class BufferManager{
 
-    deque<Page> pages;
+    
     bool inPool(string pageName);
     Page getFromPool(string pageName);
     Page insertIntoPool(string tableName, int pageIndex, int pageType, bool ofSparseMatrix);
 
     public:
+    deque<Page> pages;
     
     BufferManager();
     Page getPage(string tableName, int pageIndex, int pageType, bool ofSparseMatrix);

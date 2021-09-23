@@ -76,6 +76,7 @@ Page::Page(string containerName, int pageIndex, int pageType, bool ofSparseMatri
                 nz_elements.insert(make_pair(current_cell, current_value));
             }
             this->non_zero_elements = nz_elements;
+            this->initializeMapPointer();
         }
         else
         {
