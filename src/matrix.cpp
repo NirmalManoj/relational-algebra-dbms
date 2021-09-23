@@ -201,6 +201,10 @@ void Matrix::transpose()
             if(el_row >= el_col)
             {
                 continue;
+                if(pages.front()->nz_itr!=firstBlock->non_zero_elements.end() && pages.front()->nz_itr->first == element_ind){
+                    // val_one = firstBlock->nz_itr->second;
+                    pages.front()->nz_itr++;
+                }
             }
             swap_row = el_col;
             swap_col = el_row;
@@ -233,7 +237,7 @@ void Matrix::transpose()
             }
             int val_one = 0;
             int val_two = 0;
-            if(firstBlock->nz_itr->first == element_ind){
+            if(firstBlock->nz_itr!=firstBlock->non_zero_elements.end() && firstBlock->nz_itr->first == element_ind){
                 val_one = firstBlock->nz_itr->second;
                 // firstBlock->nz_itr++;
             }
@@ -252,7 +256,7 @@ void Matrix::transpose()
                 // secondBlock->writePage();
                 // return;
             }
-            if(firstBlock->nz_itr->first == element_ind){
+            if(firstBlock->nz_itr!=firstBlock->non_zero_elements.end() && firstBlock->nz_itr->first == element_ind){
                 // val_one = firstBlock->nz_itr->second;
                 firstBlock->nz_itr++;
             }
