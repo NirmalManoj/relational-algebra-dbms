@@ -1,5 +1,7 @@
 #include "global.h"
 #include <memory>
+#include <queue>
+#include <utility>
 
 /**
  * @brief Construct a new Matrix:: Matrix object
@@ -67,7 +69,7 @@ void Matrix::transpose()
     int block_cnt = -1;
     // Page *firstBlock;
     // Page *secondBlock;
-    std::shared_ptr<Page> firstBlock = pages.front();
+    std::shared_ptr<Page> firstBlock = pages.front(); // Maybe remove this initialization. Probably not required. Have to check sparse before removing.
     std::shared_ptr<Page> secondBlock;
 
     if(!this->isSparse)
@@ -295,6 +297,67 @@ void Matrix::transpose()
                 firstBlock->nz_itr++;
             }
         }
+
+        // {cell_number, {value, block_num}}
+        std::priority_queue< std::pair<int, std::pair<int, int> >, std::vector< std::pair<int, std::pair<int, int>> >, std::greater< std::pair<int, std::pair<int, int>> > > pq; 
+        firstBlock = nullptr;
+        for(int cur_block = 0; cur_block < total_blocks-1;  cur_block++)
+        {
+            firstBlock = std::make_shared<Page>(this->matrixName, cur_block, 1, this->isSparse);
+            for(auto it = firstBlock->non_zero_elements.begin(); it != firstBlock->non_zero_elements.end(); it++)
+            {
+                pq.push(std::make_pair(it->first, std::make_pair(it->second, cur_block)));
+            }
+            firstBlock->non_zero_elements.clear(); // Clear the current block's map
+            if(cur_block == 0)
+            {
+                for(int t_block = cur_block+1; t_block < total_blocks; t_block++)
+                {
+                    secondBlock = std::make_shared<Page>(this->matrixName, t_block, 1, this->isSparse);
+                    if(secondBlock->non_zero_elements.begin() != secondBlock->non_zero_elements.end())
+                    {
+                        auto it = secondBlock->non_zero_elements.begin();
+                        pq.push(std::make_pair(it->first, std::make_pair(it->second, t_block)));
+                        secondBlock->non_zero_elements.erase(it);
+                        secondBlock->writePage();
+                    }
+                }
+            }
+
+            int lim = this->maxElementsPerBlock;
+            auto cur = pq.top();
+            while(lim--)
+            {
+                auto cur = pq.top();
+                pq.pop();
+                if(cur.second.second > cur_block){
+                    secondBlock = std::make_shared<Page>(this->matrixName, cur.second.second, 1, this->isSparse);
+                    auto it = secondBlock->non_zero_elements.begin();
+                    if(it != secondBlock->non_zero_elements.end())
+                    {
+                        pq.push(std::make_pair(it->first, std::make_pair(it->second, cur.second.second)));
+                        secondBlock->non_zero_elements.erase(it);
+                        secondBlock->writePage();
+                    }
+                }
+                firstBlock->non_zero_elements[cur.first] = cur.second.first;
+            }
+            this->lastCellNumberInBlock[cur_block] = cur.first;
+            firstBlock->writePage();
+            firstBlock = nullptr;
+        }
+        secondBlock = std::make_shared<Page>(this->matrixName, total_blocks-1, 1, this->isSparse);
+
+        while(!pq.empty()){
+            auto cur = pq.top();
+            pq.pop();
+            secondBlock->non_zero_elements[cur.first] = cur.second.first;
+        }
+        auto it = secondBlock->non_zero_elements.rbegin();
+        if(it != secondBlock->non_zero_elements.rend()){
+            this->lastCellNumberInBlock[total_blocks-1] = it->first;
+        }
+        secondBlock->writePage();
     }
 }
 
