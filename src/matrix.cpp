@@ -203,7 +203,7 @@ void Matrix::transpose()
             if(el_row >= el_col)
             {
                 
-                if(pages.front()->nz_itr!=firstBlock->non_zero_elements.end() && pages.front()->nz_itr->first == element_ind){
+                if(pages.front()->nz_itr!=pages.front()->non_zero_elements.end() && pages.front()->nz_itr->first == element_ind){
                     // val_one = firstBlock->nz_itr->second;
                     pages.front()->nz_itr++;
                 }
@@ -319,6 +319,7 @@ void Matrix::transpose()
                         auto it = secondBlock->non_zero_elements.begin();
                         pq.push(std::make_pair(it->first, std::make_pair(it->second, t_block)));
                         secondBlock->non_zero_elements.erase(it);
+                        this->elementsPerBlockCount[t_block]--;
                         secondBlock->writePage();
                     }
                 }
@@ -328,7 +329,7 @@ void Matrix::transpose()
             auto cur = pq.top();
             while(lim--)
             {
-                auto cur = pq.top();
+                cur = pq.top();
                 pq.pop();
                 if(cur.second.second > cur_block){
                     secondBlock = std::make_shared<Page>(this->matrixName, cur.second.second, 1, this->isSparse);
@@ -337,11 +338,13 @@ void Matrix::transpose()
                     {
                         pq.push(std::make_pair(it->first, std::make_pair(it->second, cur.second.second)));
                         secondBlock->non_zero_elements.erase(it);
+                        this->elementsPerBlockCount[cur.second.second]--;
                         secondBlock->writePage();
                     }
                 }
                 firstBlock->non_zero_elements[cur.first] = cur.second.first;
             }
+            this->elementsPerBlockCount[cur_block] = firstBlock->non_zero_elements.size();
             this->lastCellNumberInBlock[cur_block] = cur.first;
             firstBlock->writePage();
             firstBlock = nullptr;
@@ -357,6 +360,7 @@ void Matrix::transpose()
         if(it != secondBlock->non_zero_elements.rend()){
             this->lastCellNumberInBlock[total_blocks-1] = it->first;
         }
+        this->elementsPerBlockCount[total_blocks-1] = secondBlock->non_zero_elements.size();
         secondBlock->writePage();
     }
 }
