@@ -200,15 +200,19 @@ void Matrix::transpose()
             el_col = element_ind % this->n;
             if(el_row >= el_col)
             {
-                continue;
+                
                 if(pages.front()->nz_itr!=firstBlock->non_zero_elements.end() && pages.front()->nz_itr->first == element_ind){
                     // val_one = firstBlock->nz_itr->second;
                     pages.front()->nz_itr++;
                 }
+                continue;
             }
             swap_row = el_col;
             swap_col = el_row;
             swap_ind = swap_row * this->n + swap_col;
+
+
+
             lo = 0, hi = this->lastCellNumberInBlock.size()-1;
             while(lo < hi){
                 mid = (lo + hi)/2;
@@ -220,6 +224,8 @@ void Matrix::transpose()
             }
             string second_block_name = bufferManager.getPageName(this->matrixName, lo);
             logger.log(second_block_name);
+
+
 
             if(pages.front()->pageName == second_block_name){
                 secondBlock = pages.front();
@@ -245,7 +251,16 @@ void Matrix::transpose()
             if(tmp_it != secondBlock->non_zero_elements.end()){
                 val_two = tmp_it->second;
             }
-            if(val_one > 0 && val_two > 0){
+            logger.log("================");
+            logger.log(element_ind);
+            logger.log(swap_ind);
+            logger.log(second_block_name);
+            logger.log(val_one);
+            logger.log(val_two);
+            logger.log(firstBlock->nz_itr->first);
+            logger.log(firstBlock->nz_itr->second);
+            logger.log("================");
+            if(val_one != 0 && val_two != 0){
                 logger.log("--------");
                 logger.log(val_one);
                 logger.log(val_two);
@@ -256,6 +271,25 @@ void Matrix::transpose()
                 // secondBlock->writePage();
                 // return;
             }
+
+
+            // This case worked with E_MAT
+            if(val_one != 0 && val_two == 0)
+            {
+                firstBlock->nz_itr++;
+                auto nodeHandler = firstBlock->non_zero_elements.extract(element_ind);
+                nodeHandler.key() = swap_ind;
+                firstBlock->non_zero_elements.insert(std::move(nodeHandler));
+            }
+
+            if(val_one == 0 && val_two != 0)
+            {
+                auto nodeHandler = secondBlock->non_zero_elements.extract(swap_ind);
+                nodeHandler.key() = element_ind;
+                secondBlock->non_zero_elements.insert(std::move(nodeHandler));
+            }
+
+
             if(firstBlock->nz_itr!=firstBlock->non_zero_elements.end() && firstBlock->nz_itr->first == element_ind){
                 // val_one = firstBlock->nz_itr->second;
                 firstBlock->nz_itr++;
