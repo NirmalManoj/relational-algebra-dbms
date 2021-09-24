@@ -74,5 +74,13 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp"
-    }
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/mnt/d/Lec 2 2/Data Systems/project-45",
+            "binaryPath": "/mnt/d/Lec 2 2/Data Systems/project-45/server",
+            "binaryArgs": []
+        }
+    ]
 }
