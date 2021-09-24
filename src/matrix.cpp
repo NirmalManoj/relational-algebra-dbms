@@ -405,9 +405,12 @@ void Matrix::transpose()
                     }
                     if(cur_block_left == 0)
                     {
-                        this->elementsPerBlockCount[nxt_block] = this->maxElementsPerBlock - cur_block_left;
-                        free_blocks.insert(std::make_pair(this->maxElementsPerBlock - this->elementsPerBlockCount[nxt_block], nxt_block));
-                        firstBlock->writePage();
+                        if(nxt_block != -1){
+                            this->elementsPerBlockCount[nxt_block] = this->maxElementsPerBlock - cur_block_left;
+                            free_blocks.insert(std::make_pair(this->maxElementsPerBlock - this->elementsPerBlockCount[nxt_block], nxt_block));
+                            firstBlock->writePage();
+                        }
+                        
                         cur_block_left = free_blocks.begin()->first;
                         nxt_block = free_blocks.begin()->second;
                         free_blocks.erase(free_blocks.begin());
