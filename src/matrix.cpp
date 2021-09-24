@@ -276,63 +276,165 @@ void Matrix::transpose()
         }
 
         // {cell_number, {value, block_num}}
-        std::priority_queue< std::pair<int, std::pair<int, int> >, std::vector< std::pair<int, std::pair<int, int>> >, std::greater< std::pair<int, std::pair<int, int>> > > pq; 
+        // std::priority_queue< std::pair<int, std::pair<int, int> >, std::vector< std::pair<int, std::pair<int, int>> >, std::greater< std::pair<int, std::pair<int, int>> > > pq; 
+        std::set<int> least_element;
+        std::map<int, std::pair<int, int>> val_map;
+        // std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>> > free_blocks;
+        std::set< std::pair<int, int> , greater<std::pair<int, int>>> free_blocks; // {free size, block_number}
+
+
+        // Initializing free_blocks
+        int tmp = 0;
+        for(auto c: this->elementsPerBlockCount)
+        {
+            free_blocks.insert(std::make_pair(this->maxElementsPerBlock - c, tmp));
+            tmp++;
+        }
+
         firstBlock = nullptr;
         for(int cur_block = 0; cur_block < total_blocks-1;  cur_block++)
         {
             firstBlock = std::make_shared<Page>(this->matrixName, cur_block, 1, this->isSparse);
-            for(auto it = firstBlock->non_zero_elements.begin(); it != firstBlock->non_zero_elements.end(); it++)
-            {
-                pq.push(std::make_pair(it->first, std::make_pair(it->second, cur_block)));
-            }
+            // for(auto it = firstBlock->non_zero_elements.begin(); it != firstBlock->non_zero_elements.end(); it++)
+            // {
+            //     pq.push(std::make_pair(it->first, std::make_pair(it->second, cur_block)));
+            // }
+            std::map<int, int> mp_copy(firstBlock->non_zero_elements);
+
+            // for(auto it = mp_copy.begin(); it != mp_copy.end(); it++){
+            //     pq.
+            // }
+
             firstBlock->non_zero_elements.clear(); // Clear the current block's map
             if(cur_block == 0)
             {
+                auto it = mp_copy.begin();
+                if(it != mp_copy.end()){
+                    // pq.insert(std::make_pair(it->first, std::make_pair(it->second, cur_block)));
+                    least_element.insert(it->first);
+                    val_map[it->first] = std::make_pair(it->second, cur_block);
+                }
+                
                 for(int t_block = cur_block+1; t_block < total_blocks; t_block++)
                 {
                     secondBlock = std::make_shared<Page>(this->matrixName, t_block, 1, this->isSparse);
                     if(secondBlock->non_zero_elements.begin() != secondBlock->non_zero_elements.end())
                     {
-                        auto it = secondBlock->non_zero_elements.begin();
-                        pq.push(std::make_pair(it->first, std::make_pair(it->second, t_block)));
-                        secondBlock->non_zero_elements.erase(it);
-                        this->elementsPerBlockCount[t_block]--;
-                        secondBlock->writePage();
+                        it = secondBlock->non_zero_elements.begin();
+                        // pq.insert(std::make_pair(it->first, std::make_pair(it->second, t_block)));
+                        // // secondBlock->non_zero_elements.erase(it);
+                        // // this->elementsPerBlockCount[t_block]--;
+                        // secondBlock->writePage();
+                        least_element.insert(it->first);
+                        val_map[it->first] = std::make_pair(it->second, t_block);
                     }
                 }
             }
 
             int lim = this->maxElementsPerBlock;
-            auto cur = pq.top();
+            auto cur_it = least_element.begin();
+            int cur = *cur_it;
             while(lim--)
             {
-                cur = pq.top();
-                pq.pop();
-                if(cur.second.second > cur_block){
-                    secondBlock = std::make_shared<Page>(this->matrixName, cur.second.second, 1, this->isSparse);
+                cur_it = least_element.begin();
+                cur = *cur_it;
+                int val_now = val_map[cur].first;
+                int block_now = val_map[cur].second;
+
+                if(block_now > cur_block){
+                    secondBlock = std::make_shared<Page>(this->matrixName, block_now, 1, this->isSparse);
+                    secondBlock->non_zero_elements.erase(secondBlock->non_zero_elements.begin());
+                    
+                    free_blocks.erase(std::make_pair(this->maxElementsPerBlock - this->elementsPerBlockCount[block_now], block_now));
+                    this->elementsPerBlockCount[block_now]--;
+                    free_blocks.insert(std::make_pair(this->maxElementsPerBlock - this->elementsPerBlockCount[block_now], block_now));
+
                     auto it = secondBlock->non_zero_elements.begin();
                     if(it != secondBlock->non_zero_elements.end())
                     {
-                        pq.push(std::make_pair(it->first, std::make_pair(it->second, cur.second.second)));
-                        secondBlock->non_zero_elements.erase(it);
-                        this->elementsPerBlockCount[cur.second.second]--;
-                        secondBlock->writePage();
+                        // pq.push(std::make_pair(it->first, std::make_pair(it->second, cur.second.second)));
+                        // secondBlock->writePage();
+                        least_element.insert(it->first);
+                        val_map[it->first] = std::make_pair(it->second, block_now);
+                    }
+                    secondBlock->writePage();
+                }
+                else if(block_now == cur_block)
+                {
+                    mp_copy.erase(cur);
+
+                    free_blocks.erase(std::make_pair(this->maxElementsPerBlock - this->elementsPerBlockCount[block_now], block_now));
+                    this->elementsPerBlockCount[block_now]--;
+                    free_blocks.insert(std::make_pair(this->maxElementsPerBlock - this->elementsPerBlockCount[block_now], block_now));
+
+                    auto it = mp_copy.begin();
+                    if(it != mp_copy.end()){    
+                        // pq.push(std::make_pair(it->first, std::make_pair(it->second, cur_block)));
+                        // // mp_copy.erase(it);
+                        least_element.insert(it->first);
+                        val_map[it->first] = std::make_pair(it->second, block_now);
                     }
                 }
-                firstBlock->non_zero_elements[cur.first] = cur.second.first;
+                firstBlock->non_zero_elements[cur] = val_now;
+                val_map.erase(cur);
+                least_element.erase(cur_it);
             }
+
             this->elementsPerBlockCount[cur_block] = firstBlock->non_zero_elements.size();
-            this->lastCellNumberInBlock[cur_block] = cur.first;
+            this->lastCellNumberInBlock[cur_block] = cur;
             firstBlock->writePage();
             firstBlock = nullptr;
+
+            // Redistribute
+            if(mp_copy.begin()!=mp_copy.end()){
+                auto it = mp_copy.begin();
+                least_element.erase(it->first);
+                val_map.erase(it->first);
+
+                int tot_size = mp_copy.size();
+                int redistributed = 0;
+                int cur_block_left = 0;
+                int nxt_block = -1;
+                while(true)
+                {
+                    if(tot_size == redistributed){
+                        this->elementsPerBlockCount[nxt_block] = this->maxElementsPerBlock - cur_block_left;
+                        free_blocks.insert(std::make_pair(this->maxElementsPerBlock - this->elementsPerBlockCount[nxt_block], nxt_block));
+                        firstBlock->writePage();
+                        break;
+                    }
+                    if(cur_block_left == 0)
+                    {
+                        this->elementsPerBlockCount[nxt_block] = this->maxElementsPerBlock - cur_block_left;
+                        free_blocks.insert(std::make_pair(this->maxElementsPerBlock - this->elementsPerBlockCount[nxt_block], nxt_block));
+                        firstBlock->writePage();
+                        cur_block_left = free_blocks.begin()->first;
+                        nxt_block = free_blocks.begin()->second;
+                        free_blocks.erase(free_blocks.begin());
+
+                        firstBlock =  std::make_shared<Page>(this->matrixName, nxt_block, 1, this->isSparse);
+                    }
+                    firstBlock->non_zero_elements[it->first] = it->second;
+                    it++;
+                    redistributed++;
+                }
+            }
+
         }
+
         secondBlock = std::make_shared<Page>(this->matrixName, total_blocks-1, 1, this->isSparse);
 
-        while(!pq.empty()){
-            auto cur = pq.top();
-            pq.pop();
-            secondBlock->non_zero_elements[cur.first] = cur.second.first;
-        }
+        // while(!pq.empty()){
+        //     auto cur = pq.top();
+        //     pq.pop();
+        //     secondBlock->non_zero_elements[cur.first] = cur.second.first;
+        // }
+        // for(auto c: least_element)
+        // {
+        //     secondBlock->
+        // }
+
+        // Redistribution completely makes the final page.
         auto it = secondBlock->non_zero_elements.rbegin();
         if(it != secondBlock->non_zero_elements.rend()){
             this->lastCellNumberInBlock[total_blocks-1] = it->first;
