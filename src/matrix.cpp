@@ -178,16 +178,7 @@ void Matrix::transpose()
                 }
                 break;
             }
-            // while(pages.front()->nz_itr != pages.front()->non_zero_elements.end()){
-            //     auto it = pages.front()->nz_itr;
-            //     int e_row = it->first/this->n;
-            //     int e_col = it->first%this->n;
-            //     if(e_row >= e_col){
-            //         pages.front()->nz_itr++;
-            //     }else{
-            //         break;
-            //     }
-            // }
+            
             if(block_cnt+1 != total_blocks)
             {
                 if(this->lastCellNumberInBlock[block_cnt]+1 == element_ind){
@@ -202,57 +193,19 @@ void Matrix::transpose()
                     }
                 }
             }
-            // if(pages.front()->nz_itr == pages.front()->non_zero_elements.end()){
-            //     if(block_cnt+1 == total_blocks){
-            //         // Doing nothing here. All blocks consumed.
-            //     }else{
-            //         block_cnt++;
-            //         pages.front()->writePage();
-            //         int x = pages.front()->non_zero_elements.size();
-            //         pages.pop_front();
-            //         if(!pages.empty() && pages.front()->pageName == bufferManager.getPageName(this->matrixName, block_cnt)){
-                        
-            //         }else{
-            //             pages.push_front(std::make_shared<Page>(this->matrixName, block_cnt, 1, this->isSparse));
-            //         }
-                    
-            //     }
-            // }
-            // while(pages.front()->nz_itr != pages.front()->non_zero_elements.end()){
-            //     auto it = pages.front()->nz_itr;
-            //     int e_row = it->first/this->n;
-            //     int e_col = it->first%this->n;
-            //     if(e_row >= e_col){
-            //         pages.front()->nz_itr++;
-            //     }else{
-            //         break;
-            //     }
-            // }
-            firstBlock = pages.front();
-            // if(firstBlock->nz_itr != firstBlock->non_zero_elements.end())
-            // {
 
-            // }
+            firstBlock = pages.front();
+
             el_row = element_ind/this->n;
             el_col = element_ind % this->n;
             if(el_row >= el_col)
             {
                 continue;
             }
-            // if(el_row >= el_col)
-            // {
-                
-            //     if(pages.front()->nz_itr!=pages.front()->non_zero_elements.end() && pages.front()->nz_itr->first == element_ind){
-            //         // val_one = firstBlock->nz_itr->second;
-            //         pages.front()->nz_itr++;
-            //     }
-            //     continue;
-            // }
+
             swap_row = el_col;
             swap_col = el_row;
             swap_ind = swap_row * this->n + swap_col;
-
-
 
             lo = 0, hi = this->lastCellNumberInBlock.size()-1;
             while(lo < hi){
@@ -266,8 +219,6 @@ void Matrix::transpose()
             string second_block_name = bufferManager.getPageName(this->matrixName, lo);
             logger.log(second_block_name);
 
-
-
             if(pages.front()->pageName == second_block_name){
                 secondBlock = pages.front();
                 logger.log("YES");
@@ -278,7 +229,6 @@ void Matrix::transpose()
                     pages.back()->writePage();
                     pages.pop_back();
                 }
-                // pages.push_back(new Page(this->matrixName, lo, 1, this->isSparse));
                 pages.push_back(std::make_shared<Page>(this->matrixName, lo, 1, this->isSparse));
                 secondBlock = pages.back();
             }
@@ -287,7 +237,6 @@ void Matrix::transpose()
             auto tmp_it = firstBlock->non_zero_elements.find(element_ind);
             if(tmp_it != firstBlock->non_zero_elements.end()){
                 val_one = tmp_it->second;
-                // firstBlock->nz_itr++;
             }
             tmp_it = secondBlock->non_zero_elements.find(swap_ind);
             if(tmp_it != secondBlock->non_zero_elements.end()){
@@ -295,11 +244,6 @@ void Matrix::transpose()
             }
             logger.log("================");
             logger.log(element_ind);
-            if(element_ind == 1154)
-            {
-                logger.log("LOL");
-                // logger.log(firstBlock->non_zero_elements[element_ind]);
-            }
             logger.log(swap_ind);
             logger.log(second_block_name);
             logger.log(val_one);
@@ -314,17 +258,10 @@ void Matrix::transpose()
                 logger.log("------------");
                 tmp_it->second = val_one;
                 firstBlock->non_zero_elements[element_ind] = val_two;
-                // firstBlock->nz_itr->second = val_two;
-                // firstBlock->writePage();
-                // secondBlock->writePage();
-                // return;
             }
 
-
-            // This case worked with E_MAT
             if(val_one != 0 && val_two == 0)
             {
-                // firstBlock->nz_itr++;
                 auto nodeHandler = firstBlock->non_zero_elements.extract(element_ind);
                 nodeHandler.key() = swap_ind;
                 firstBlock->non_zero_elements.insert(std::move(nodeHandler));
@@ -336,12 +273,6 @@ void Matrix::transpose()
                 nodeHandler.key() = element_ind;
                 secondBlock->non_zero_elements.insert(std::move(nodeHandler));
             }
-
-
-            // if(firstBlock->nz_itr!=firstBlock->non_zero_elements.end() && firstBlock->nz_itr->first == element_ind){
-            //     // val_one = firstBlock->nz_itr->second;
-            //     firstBlock->nz_itr++;
-            // }
         }
 
         // {cell_number, {value, block_num}}
