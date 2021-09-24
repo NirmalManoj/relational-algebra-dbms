@@ -73,7 +73,7 @@ Page::Page(string containerName, int pageIndex, int pageType, bool ofSparseMatri
                 current_cell = stoi(line);
                 getline(fin, line, ' ');
                 current_value = stoi(line);
-                nz_elements.insert(make_pair(current_cell, current_value));
+                nz_elements.insert(std::make_pair(current_cell, current_value));
             }
             this->non_zero_elements = nz_elements;
             this->initializeMapPointer();

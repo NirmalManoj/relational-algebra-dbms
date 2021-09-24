@@ -178,12 +178,23 @@ void Matrix::transpose()
                 }
                 break;
             }
+            while(pages.front()->nz_itr != pages.front()->non_zero_elements.end()){
+                auto it = pages.front()->nz_itr;
+                int e_row = it->first/this->n;
+                int e_col = it->first%this->n;
+                if(e_row >= e_col){
+                    pages.front()->nz_itr++;
+                }else{
+                    break;
+                }
+            }
             if(pages.front()->nz_itr == pages.front()->non_zero_elements.end()){
                 if(block_cnt+1 == total_blocks){
                     // Doing nothing here. All blocks consumed.
                 }else{
                     block_cnt++;
                     pages.front()->writePage();
+                    int x = pages.front()->non_zero_elements.size();
                     pages.pop_front();
                     if(!pages.empty() && pages.front()->pageName == bufferManager.getPageName(this->matrixName, block_cnt)){
                         
@@ -193,22 +204,32 @@ void Matrix::transpose()
                     
                 }
             }
-            // firstBlock = pages.front();
+            while(pages.front()->nz_itr != pages.front()->non_zero_elements.end()){
+                auto it = pages.front()->nz_itr;
+                int e_row = it->first/this->n;
+                int e_col = it->first%this->n;
+                if(e_row >= e_col){
+                    pages.front()->nz_itr++;
+                }else{
+                    break;
+                }
+            }
+            firstBlock = pages.front();
             // if(firstBlock->nz_itr != firstBlock->non_zero_elements.end())
             // {
 
             // }
             el_row = element_ind/this->n;
             el_col = element_ind % this->n;
-            if(el_row >= el_col)
-            {
+            // if(el_row >= el_col)
+            // {
                 
-                if(pages.front()->nz_itr!=pages.front()->non_zero_elements.end() && pages.front()->nz_itr->first == element_ind){
-                    // val_one = firstBlock->nz_itr->second;
-                    pages.front()->nz_itr++;
-                }
-                continue;
-            }
+            //     if(pages.front()->nz_itr!=pages.front()->non_zero_elements.end() && pages.front()->nz_itr->first == element_ind){
+            //         // val_one = firstBlock->nz_itr->second;
+            //         pages.front()->nz_itr++;
+            //     }
+            //     continue;
+            // }
             swap_row = el_col;
             swap_col = el_row;
             swap_ind = swap_row * this->n + swap_col;
@@ -255,6 +276,11 @@ void Matrix::transpose()
             }
             logger.log("================");
             logger.log(element_ind);
+            if(element_ind == 1154)
+            {
+                logger.log("LOL");
+                logger.log(firstBlock->non_zero_elements[element_ind]);
+            }
             logger.log(swap_ind);
             logger.log(second_block_name);
             logger.log(val_one);
@@ -278,7 +304,7 @@ void Matrix::transpose()
             // This case worked with E_MAT
             if(val_one != 0 && val_two == 0)
             {
-                firstBlock->nz_itr++;
+                // firstBlock->nz_itr++;
                 auto nodeHandler = firstBlock->non_zero_elements.extract(element_ind);
                 nodeHandler.key() = swap_ind;
                 firstBlock->non_zero_elements.insert(std::move(nodeHandler));
