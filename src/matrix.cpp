@@ -400,6 +400,9 @@ void Matrix::transpose()
                     if(tot_size == redistributed){
                         this->elementsPerBlockCount[nxt_block] = this->maxElementsPerBlock - cur_block_left;
                         free_blocks.insert(std::make_pair(this->maxElementsPerBlock - this->elementsPerBlockCount[nxt_block], nxt_block));
+                        auto tmpit = firstBlock->non_zero_elements.begin();
+                        least_element.insert(tmpit->first);
+                        val_map[tmpit->first] = std::make_pair(tmpit->second, nxt_block);
                         firstBlock->writePage();
                         break;
                     }
@@ -408,6 +411,9 @@ void Matrix::transpose()
                         if(nxt_block != -1){
                             this->elementsPerBlockCount[nxt_block] = this->maxElementsPerBlock - cur_block_left;
                             free_blocks.insert(std::make_pair(this->maxElementsPerBlock - this->elementsPerBlockCount[nxt_block], nxt_block));
+                            auto tmpit = firstBlock->non_zero_elements.begin();
+                            least_element.insert(tmpit->first);
+                            val_map[tmpit->first] = std::make_pair(tmpit->second, nxt_block);
                             firstBlock->writePage();
                         }
                         while(!free_blocks.empty() && free_blocks.begin()->second <= cur_block)
@@ -419,6 +425,10 @@ void Matrix::transpose()
                         free_blocks.erase(free_blocks.begin());
 
                         firstBlock =  std::make_shared<Page>(this->matrixName, nxt_block, 1, this->isSparse);
+
+                        auto tmpit = firstBlock->non_zero_elements.begin();
+                        least_element.erase(tmpit->first);
+                        val_map.erase(tmpit->first);
                     }
                     firstBlock->non_zero_elements[it->first] = it->second;
                     it++;
