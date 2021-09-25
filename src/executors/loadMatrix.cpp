@@ -30,5 +30,9 @@ void executeLOAD_MATRIX()
         matrixCatalogue.insertMatrix(matrix);
         cout << "Loaded Matrix. Dimension of square matrix: " << matrix->n << endl;
     }
+    else
+    {
+        cout << "ERROR: Matrix loading failed. Try a valid square matrix" << endl;   
+    }
     return;
 }
