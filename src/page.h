@@ -22,13 +22,14 @@ class Page{
     int elementCount; // for matrices
     int pageType; // 0 - table page; 1 - matrix page
     bool ofSparseMatrix; // if a page corresponds to a sparse matrix
+
+
+    public:
     vector<vector<int>> rows; // for rows
     vector<int> all_elements; // for non-sparse matrices
     map<int, int> non_zero_elements; // for sparse matrices
     map<int, int>::iterator nz_itr; // non zero elements map iterator
-
-    public:
-
+    
     string pageName = "";
     Page();
     Page(string containerName, int pageIndex, int pageType, bool ofSparseMatrix);
@@ -40,6 +41,7 @@ class Page{
     vector<int> getNextSparseMatrixElement();
     void initializeMapPointer();
     void writePage();
+    string getPageName(string containerName, int pageIndex);
 };
 
 #endif

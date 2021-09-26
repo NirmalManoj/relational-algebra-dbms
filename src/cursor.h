@@ -20,6 +20,7 @@ class Cursor{
     public:
     Cursor(string containerName, int pageIndex, int pageType, bool ofSparseMatrix);
     vector<int> getNext();
+    vector<int> getElementAtIndex(int elementIndex);
     void nextPage(int pageIndex);
 };
 

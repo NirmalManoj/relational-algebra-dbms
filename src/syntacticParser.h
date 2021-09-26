@@ -84,6 +84,7 @@ public:
     string loadRelationName = "";
 
     string printRelationName = "";
+    string transposeRelationName = "";
 
     string projectionResultRelationName = "";
     vector<string> projectionColumnList;

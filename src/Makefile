@@ -1,7 +1,7 @@
 # *****************************************************
 # Variables to control Makefile operation
 
-CXX = g++
+CXX = g++ -std=c++17
 CXXFLAGS = -g -I .
 
 SRC := $(wildcard *.cpp)

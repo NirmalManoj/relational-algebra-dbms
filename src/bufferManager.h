@@ -25,12 +25,13 @@
  */
 class BufferManager{
 
-    deque<Page> pages;
+    
     bool inPool(string pageName);
     Page getFromPool(string pageName);
     Page insertIntoPool(string tableName, int pageIndex, int pageType, bool ofSparseMatrix);
 
     public:
+    deque<Page> pages;
     
     BufferManager();
     Page getPage(string tableName, int pageIndex, int pageType, bool ofSparseMatrix);
@@ -39,6 +40,7 @@ class BufferManager{
     void writePage(string containerName, int pageIndex, map<int, int> non_zero_elements, int elementCount);     // Sparse matrix
     void deleteFile(string tableName, int pageIndex);
     void deleteFile(string fileName);
+    string getPageName(string containerName, int pageIndex);
 };
 
 #endif
