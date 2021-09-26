@@ -75,20 +75,35 @@
 
 * If this swap-cell was not found in the position it was supposed to be, it clearly implies that it was omitted out, i.e, it was a zero value. Thus, now the current cell would become 0 and this omitted cell would have non-zero contents of the current cell. Hence, we simply update the key which is pointing to the non-zero value, such that the key is now the swap-cell number and not the original cell number. For example if cell number 25 had 6 and its swap-cell, say 50 had a 0 value (not present in map intially), then the initial key-value pair would be 25:6 (zero cell is ignored). After the transpose, the pair is updated to 50:6. 
 
-NOTE - Because of this step, the global sorted ordering across cell numbers (keys) across all pages might not hold, but it doesn't affect the binary search across 'last cell in block' vector or the current swapping process in any way. This is because every pair of cells (current cell and its swap-cell) is accessed only once, and if both of them were to have non-zero values, any number of above kind of operations (zero and non-zero case) wouldn't alter the block number of both of these non-zero cells. Thus, using this approach would help in obtaining the transpose for all possible cases.
+**NOTE** - *Because of this step, the global sorted ordering across cell numbers (keys) across all pages might not hold, but it doesn't affect the binary search across 'last cell in block' vector or the current swapping process in any way*. This is because every pair of cells (current cell and its swap-cell) is accessed only once, and if both of them were to have non-zero values, any number of above kind of operations (zero and non-zero case) wouldn't alter the block number of both of these non-zero cells. Thus, using this approach would help in obtaining the transpose for all possible cases.
 
 * If the current cell number doesn't exist in the blocks, it implies its a zero value. Follow the same logic above (swapping key with its swap-cell if its swap-cell has a non-zero value, or, do nothing if its swap-cell also doesn't exist, as it is also zero anyway).
 
-* We apply the above logic for every cell whose row number < column number, and thus we have obtained the transposed cell number - cell value pairings correctly. The only issue now is that we don't have them in serial order across blocks, for the matrix (for easier loading, printing and exporting).
+* **We apply the above logic for every cell whose row number < column number**, and thus we have obtained the transposed cell number - cell value pairings correctly. The only issue now is that we don't have them in serial order across blocks, for the matrix (for easier loading, printing and exporting).
 
-* We create a priority queue, whose elements would be the current smallest key-value pair for each block, along with the block number. One temporary block is also initialized in main memory, to store elements in an ordered manner (used in swapping to blocks). 
+  
 
-* The priority queue is initialized with smallest cell number-value pairs of all blocks, and the top (smallest cell number) is popped and stored in the temporary block. From the block number to which the top belongs, we push the next smallest cell number-value pair into the priority queue, and repeat the process. Note that when an element is pushed into the queue or the temporary block, it is deleted from the disk block, freeing up space in the block.
+Now we fix the ordering of elements across the blocks and make it sorted. The logic is as follows.
 
-* The above step is repeated till the temporary block is filled. Once the temporary block is filled (maxElementCountPerBlock is reached), the residual elements still remaining in the first blocked are shifted to empty spaces in the blocks after that (it is guaranteed that they have enough space because we were freeing up space optimally and number of elements is constant). Now the first block is completely empty, and we fill it up with all entries of the temporary block. This temporary block is now cleared, and the same algorithm is applied again, starting from the second block. 
+1. We create a set whose elements would be the current smallest key of the key-value pair for each block. We have another int to pair(int, int) map which gives for each index in the set, the corresponding value and the block number.  The map in the current block being processed is copied and that map is cleared.
 
-* This ensures that the blocks are stored in serial order (from beginning to end). Eventually the priority queue becomes empty, implying that all the elements were processed.
+2. The set is initialized with smallest cell number from all blocks, and the top (smallest cell number) is popped and added to the map of the current block. From the block number in which the element we popped belonged to, we insert the next smallest cell number into the set and correspondingly to the map which stores (cell, value, block_num) pairs.  The process is repeated. Note that when an element is pushed into the set or added to map of the current block, it is deleted from the disk block, freeing up space in the block.
 
-* Thus we have obtained the transpose of the matrix in-place, by using a small data structure and atmost two temporary blocks in main memory.
+3. The above step is repeated till the current block is filled. Once the current block is filled (maxElementCountPerBlock is reached), the residual elements still remaining in the copy of the current block we made initially are shifted to empty spaces in the blocks after that (it is guaranteed that they have enough space because we were freeing up space optimally and number of elements is constant). The blocks to redistribute to are found optimally using another set sorted in the reverse order of the number of cells available in the block. Hence, the blocks could be found with time complexity of O(num of blocks).
+
+4. Now the block we processed is in the final state we want it to be. So we move on to the next block and repeat the process for it.
+
+5. This ensures that the blocks are stored in serial order (from beginning to end). Eventually the set becomes empty, implying that all the elements were processed.
+
+6. Thus we have obtained the transpose of the matrix in-place, by using a small data structure and at most two temporary blocks in main memory.
+
+
+
+The worst case time complexity of the tranpose operation would `O(Number of blocks * maxElementCountPerBlock  * log(Number of blocks))`.
+
+
+
+
+
 
 
